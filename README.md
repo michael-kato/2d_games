@@ -1,2 +1,2 @@
-# unity_games
-Unity Games
+# 2d_games
+2D games made in Unity
