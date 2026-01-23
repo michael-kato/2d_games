@@ -20,34 +20,38 @@ public class GameLogic : MonoBehaviour
     private Sprite frontTile;
     [ItemCanBeNull] private List<List<Sprite>> tileLayout;
 
-    private static List<Sprite> _flippedTiles;
-
+    private static List<GameObject> _flippedTiles;
     
-    public  bool CheckGuess(Sprite sprite)
+    public static void CheckGuess(GameObject card)
     {
+        
+        _flippedTiles.Add(card);
+        
         if (_flippedTiles.Count == 2)
         {
+            CardManager cm1 = _flippedTiles[0].GetComponent<CardManager>();
+            CardManager cm2 = _flippedTiles[1].GetComponent<CardManager>();
+            
             // check matches
             if (_flippedTiles[0].name == _flippedTiles[1].name)
             {
-                Destroy(_flippedTiles[0]);
-                Destroy(_flippedTiles[1]);
-                _flippedTiles.Clear();
+                cm1.Vaporize();
+                cm2.Vaporize();
                 Debug.Log("You got it! +1");
-                return true;
             }
-
-            _flippedTiles[1].GetComponent<CardManager>();
-            return false;
+            else
+            {
+                cm1.Reset();
+                cm2.Reset();
+            }
+            
+            _flippedTiles.Clear();
         }
-
-        _flippedTiles.Add(sprite);
-        return false;
     }
     
     void Start()
     {
-        _flippedTiles = new List<Sprite>();
+        _flippedTiles = new List<GameObject>();
         
         frontTile = frontTiles[0];
         float halfWidth = camera.orthographicSize / 2f;
@@ -80,6 +84,7 @@ public class GameLogic : MonoBehaviour
                 tileLayout[i].Add(sprite);
                 
                 GameObject card = Instantiate(cardPrefab);
+                card.name = sprite.name;
                 SpriteRenderer sr = card.GetComponent<SpriteRenderer>();
                 CardManager cm = card.GetComponent<CardManager>();
                 cm.frontSprite = frontTile;
