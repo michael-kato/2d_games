@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: match_sprites_back_0
+      name: card_back_0
       rect:
         serializedVersion: 2
         x: 0
@@ -118,7 +118,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: match_sprites_triangle
+      name: card_triangle
       rect:
         serializedVersion: 2
         x: 256
@@ -139,7 +139,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: match_sprites_square
+      name: card_square
       rect:
         serializedVersion: 2
         x: 512
@@ -160,7 +160,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: match_sprites_circle
+      name: card_circle
       rect:
         serializedVersion: 2
         x: 768
@@ -181,7 +181,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: match_sprites_back_1
+      name: card_back_1
       rect:
         serializedVersion: 2
         x: 0
@@ -202,7 +202,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: match_sprites_octagon
+      name: card_octagon
       rect:
         serializedVersion: 2
         x: 256
@@ -223,7 +223,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: match_sprites_diamond
+      name: card_diamond
       rect:
         serializedVersion: 2
         x: 512
@@ -244,7 +244,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: match_sprites_oval
+      name: card_oval
       rect:
         serializedVersion: 2
         x: 768
@@ -265,7 +265,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: match_sprites_back_2
+      name: card_back_2
       rect:
         serializedVersion: 2
         x: 0
@@ -286,10 +286,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: match_sprites_filler
+      name: card_filler
       rect:
         serializedVersion: 2
-        x: 768
+        x: 770
         y: 1280
         width: 256
         height: 256
@@ -317,16 +317,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      match_sprites_back_0: 1923926079
-      match_sprites_back_1: 1894142650
-      match_sprites_back_2: 2119255759
-      match_sprites_circle: -1527077851
-      match_sprites_diamond: -1042173298
-      match_sprites_filler: -205779438
-      match_sprites_octagon: -2143346065
-      match_sprites_oval: -1979923408
-      match_sprites_square: -1070444767
-      match_sprites_triangle: 86665313
+      card_back_0: 1923926079
+      card_back_1: 1894142650
+      card_back_2: 2119255759
+      card_circle: -1527077851
+      card_diamond: -1042173298
+      card_filler: -205779438
+      card_octagon: -2143346065
+      card_oval: -1979923408
+      card_square: -1070444767
+      card_triangle: 86665313
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

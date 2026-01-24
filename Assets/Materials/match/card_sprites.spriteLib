@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library:
+  - m_Name: matchables
+    m_Hash: 526309921
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: circle
+      m_Hash: 347563385
+      m_Sprite: {fileID: -1527077851, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1527077851, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    - m_Name: diamond
+      m_Hash: 307951436
+      m_Sprite: {fileID: -1042173298, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1042173298, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    - m_Name: oval
+      m_Hash: 715086654
+      m_Sprite: {fileID: -1979923408, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1979923408, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    - m_Name: square
+      m_Hash: 233007273
+      m_Sprite: {fileID: -1070444767, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1070444767, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    - m_Name: triangle
+      m_Hash: 530017671
+      m_Sprite: {fileID: 86665313, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 86665313, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    - m_Name: octagon
+      m_Hash: 617459325
+      m_Sprite: {fileID: -2143346065, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -2143346065, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    - m_Name: filler
+      m_Hash: 770813397
+      m_Sprite: {fileID: -205779438, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -205779438, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 7
+  - m_Name: front_face
+    m_Hash: 1036304651
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: front_0
+      m_Hash: 997841788
+      m_Sprite: {fileID: 1923926079, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1923926079, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    - m_Name: front_1
+      m_Hash: 209644522
+      m_Sprite: {fileID: 1894142650, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1894142650, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    - m_Name: front_2
+      m_Hash: 360168016
+      m_Sprite: {fileID: 2119255759, guid: f0db32e41d813f6408b333a213293747, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 2119255759, guid: f0db32e41d813f6408b333a213293747, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 3
+  m_PrimaryLibraryGUID: 
+  m_ModificationHash: 639048607027166875
+  m_Version: 1

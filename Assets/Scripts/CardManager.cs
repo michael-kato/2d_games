@@ -1,21 +1,29 @@
 using System.Collections;
-using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class CardManager : MonoBehaviour
+public class CardManager : MonoBehaviour, IPointerClickHandler
 {
     
     private bool _isSelected;
     float speed = 0.2f;
     private bool _isRotating;
-    private Sprite _sprite;
+    private Image _imageComponent;
     public Sprite frontSprite;
     public Sprite backSprite;
+    private Transform _cameraTransform;
+    private Animator _animator;
     
     void Start()
     {
-        _sprite = GetComponent<SpriteRenderer>().sprite;
+        _imageComponent = GetComponent<Image>();
+        _cameraTransform = Camera.main.transform;
+        _animator = GetComponent<Animator>();
+        
+        float randomOffset = Random.Range(0f, 1f);
+        _animator.Play("card_idle", 0, randomOffset);
     }
     
     void Update()
@@ -23,12 +31,12 @@ public class CardManager : MonoBehaviour
         
     }
     
-    void OnMouseDown()
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (!_isSelected)
         {
             _isSelected = true;
-            StartCoroutine(FlipCard(180));
+            _animator.SetTrigger("OnClick");
             GameLogic.CheckGuess(this.GameObject());
         }
     }
@@ -36,7 +44,6 @@ public class CardManager : MonoBehaviour
     {
         // Stop existing flips to prevent the "_isRotating" lock
         StopAllCoroutines(); 
-        _isRotating = false;
         StartCoroutine(DoReset());
     }
 
@@ -44,9 +51,10 @@ public class CardManager : MonoBehaviour
     {
         _isSelected = false; 
         yield return new WaitForSeconds(0.3f);
-        yield return StartCoroutine(FlipCard(180)); 
+        _animator.SetTrigger("OnClick");
     }
 
+    // old! 
     public IEnumerator FlipCard(float adjustment)
     {
         _isRotating = true;
@@ -61,11 +69,11 @@ public class CardManager : MonoBehaviour
             transform.rotation = Quaternion.Slerp(startRotation, endRotation, t);
         
             // swap sprites on flip
-            float dot = Vector3.Dot(transform.forward, Camera.main.transform.forward);
+            float dot = Vector3.Dot(transform.forward, _cameraTransform.forward);
             if (dot > 0) {
-                _sprite = frontSprite;
+                _imageComponent.sprite = frontSprite;
             } else {
-                _sprite = backSprite;
+                _imageComponent.sprite = backSprite;
             }
 
             elapsed += Time.deltaTime;
@@ -83,8 +91,14 @@ public class CardManager : MonoBehaviour
 
     IEnumerator DoVaporize()
     {
+        yield return new WaitForSeconds(0.2f);
+        
+        var vfx = GetComponent<ParticleSystem>();
+        vfx.Play();
         yield return new WaitForSeconds(0.3f);
-    
-        Destroy(gameObject); 
+        _imageComponent.sprite = null;
+        _imageComponent.material = null;
+        _imageComponent.color = new Color(0,0,0,0);
+        this.enabled = false;
     }
 }
