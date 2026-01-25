@@ -40,49 +40,30 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
             GameLogic.CheckGuess(this.GameObject());
         }
     }
+    
+    public void SwapSprite() {
+        _imageComponent.sprite = _isSelected ? backSprite : frontSprite;
+    }
+    
     public void Reset()
     {
-        // Stop existing flips to prevent the "_isRotating" lock
-        StopAllCoroutines(); 
+        //StopAllCoroutines(); 
         StartCoroutine(DoReset());
     }
 
     IEnumerator DoReset()
     {
         _isSelected = false; 
-        yield return new WaitForSeconds(0.3f);
-        _animator.SetTrigger("OnClick");
-    }
-
-    // old! 
-    public IEnumerator FlipCard(float adjustment)
-    {
-        _isRotating = true;
-    
-        Quaternion startRotation = transform.rotation;
-        Quaternion endRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, adjustment, 0));
-    
-        float elapsed = 0.0f;
-        while (elapsed < speed)
-        {
-            float t = elapsed / speed;
-            transform.rotation = Quaternion.Slerp(startRotation, endRotation, t);
+        yield return new WaitForSeconds(0.7f);
         
-            // swap sprites on flip
-            float dot = Vector3.Dot(transform.forward, _cameraTransform.forward);
-            if (dot > 0) {
-                _imageComponent.sprite = frontSprite;
-            } else {
-                _imageComponent.sprite = backSprite;
-            }
-
-            elapsed += Time.deltaTime;
-            yield return null; 
-        }
-
-        transform.rotation = endRotation;
-        _isRotating = false;
+        _animator.SetFloat("FlipSpeed", -1);
+        _animator.Play("card_flip", 0, 1.0f);
+        yield return new WaitForSeconds(0.33f);
+        _animator.SetFloat("FlipSpeed", 1);
+        
+        _animator.SetTrigger("Reset");
     }
+    
 
     public void Vaporize()
     {
@@ -91,7 +72,7 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
 
     IEnumerator DoVaporize()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         
         var vfx = GetComponent<ParticleSystem>();
         vfx.Play();
