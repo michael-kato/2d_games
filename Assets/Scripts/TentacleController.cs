@@ -1,29 +1,37 @@
 using UnityEngine;
 
-public class TentacleAmbience : MonoBehaviour
+public class TentacleController : MonoBehaviour
 {
     [Header("References")]
     public Transform ikTarget;
-    private Vector3 anchorPoint;
 
-    [Header("Movement Settings")]
-    public float movementRadius = 10f;    // How far from the anchor it can reach
-    public float moveSpeed = 0.1f;       // Slow, organic speed
-    public float decisionInterval;  // Change targets every 5 seconds
 
-    [Header("Perlin Wiggle")]
-    public float wiggleAmount = 0.3f;
-    public float wiggleSpeed = 1.0f;
+    [Header("Movement")]
+    public float movementRadius = 4f;
+    public float idleSpeed = 0.5f;
+    public float followSpeed = 2.0f; // Faster when following mouse
+    public float decisionInterval;
+
+    [Header("Behaviors")]
+    [Range(0, 1)] public float mouseFollowChance = 0.33f;
 
     private Vector3 currentDestination;
     private float timer;
-    private Vector2 noiseOffset;
+    private bool isFollowingMouse = false;
+    private Camera _mainCamera;
+    
+    private Vector3 _defaultPosition;
 
     void Start()
     {
-        decisionInterval = Random.Range(2f, 10f);
-        noiseOffset = new Vector2(Random.Range(0f, 100f), Random.Range(0f, 100f));
-        PickNewRandomPoint();
+        _mainCamera = Camera.main;
+        _defaultPosition = ikTarget.transform.position;
+        _defaultPosition.y -= 0.3f;
+        
+        // Offset the start timer so all tentacles don't think at once
+        decisionInterval =- Random.Range(2, 5);
+        timer = Random.Range(0, decisionInterval);
+        PickNewBehavior();
     }
 
     void Update()
@@ -32,27 +40,56 @@ public class TentacleAmbience : MonoBehaviour
 
         if (timer >= decisionInterval)
         {
-            PickNewRandomPoint();
+            PickNewBehavior();
             timer = 0;
         }
 
-        // 1. Calculate the Perlin Wiggle for micro-movement
-        float noiseX = Mathf.PerlinNoise(Time.time * wiggleSpeed + noiseOffset.x, 0) - 0.5f;
-        float noiseY = Mathf.PerlinNoise(0, Time.time * wiggleSpeed + noiseOffset.y) - 0.5f;
-        Vector3 wiggle = new Vector3(noiseX, noiseY, 0) * wiggleAmount;
+        float activeSpeed = idleSpeed;
 
-        // 2. Smoothly move the IK Target toward the destination
-        // Using Lerp with a slow speed gives that "drifting" feel
-        ikTarget.position = Vector3.Lerp(ikTarget.position, currentDestination + wiggle, Time.deltaTime * moveSpeed);
+        if (isFollowingMouse)
+        {
+            // Update destination to mouse position
+            currentDestination = GetMouseWorldPos();
+            activeSpeed = followSpeed;
+            
+            // Constraint: Don't let it stretch too far from anchor
+            currentDestination = ClampToRadius(currentDestination);
+        }
+
+        // Smoothly move the IK Handle
+        ikTarget.position = Vector3.Lerp(ikTarget.position, currentDestination, Time.deltaTime * activeSpeed);
     }
 
-    void PickNewRandomPoint()
+    void PickNewBehavior()
     {
-        // Pick a random direction within a hemisphere (facing away from the screen edge)
-        Vector2 randomCircle = Random.insideUnitCircle * movementRadius;
-        
-        // We add this to the anchorPoint.position so the tentacle stays 
-        // tethered to its specific screen-edge location.
-        currentDestination = anchorPoint + (Vector3)randomCircle;
+        // The "1/3 of the time" roll
+        isFollowingMouse = Random.value < mouseFollowChance;
+
+        if (!isFollowingMouse)
+        {
+            // Pick a random idle point
+            Vector2 randomCircle = Random.insideUnitCircle * movementRadius;
+            currentDestination = _defaultPosition + (Vector3)randomCircle;
+        }
+    }
+
+    Vector3 ClampToRadius(Vector3 target)
+    {
+        Vector3 offset = target - _defaultPosition;
+        return _defaultPosition + Vector3.ClampMagnitude(offset, movementRadius);
+    }
+
+    Vector3 GetMouseWorldPos()
+    {
+        Vector3 p = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        p.z = 0;
+        return p;
+    }
+
+    // Visualize the reach in the editor
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(_defaultPosition, movementRadius);
     }
 }
