@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseParallax : MonoBehaviour
+public class ParallaxManager : MonoBehaviour
 {
     [Header("Settings")]
-    public float amount = 0.1f; // How much it moves
-    public float smoothSpeed = 2f; // How "heavy" the movement feels
+    public float amount = 10f;
+    public float layerDifference = 0.1f;
+    public float smoothSpeed = 2f;
     public GameObject bg1;
     public GameObject bg2;
     public GameObject bg3;
@@ -15,11 +16,11 @@ public class MouseParallax : MonoBehaviour
     private Transform _bg3;
     private List<Transform> _updates;
     
-    private Vector3 startPos;
+    private Vector3 _defaultPosition;
+    private Vector3 _parallaxPosition;
 
     void Start()
     {
-        startPos = transform.position; // ??
         _bg1 = bg1.transform;
         _bg2 = bg2.transform;
         _bg3 = bg3.transform;
@@ -36,14 +37,18 @@ public class MouseParallax : MonoBehaviour
         for (int i = 0; i < _updates.Count; i++)
         {
             Transform t = _updates[i];
-            float a = amount + 0.03f * i;
+
+            float a = amount + layerDifference * i;
             
+            _defaultPosition.z = t.position.z;
+            _parallaxPosition = new Vector3(xOffset * a, yOffset * a, 0);
+                
             // 2. Calculate the new target position
-            Vector3 targetPos = startPos - new Vector3(xOffset * a, yOffset * a, 0);
+            Vector3 targetPos = _defaultPosition - new Vector3(xOffset * a, yOffset * a, 0);
 
             // 3. Smoothly move (Lerp) to the target
-            t.position = Vector3.Lerp(t.position, targetPos, Time.deltaTime * smoothSpeed);
+            t.position = Vector3.Lerp(_defaultPosition, targetPos, Time.deltaTime * smoothSpeed);
+            
         }
-
     }
 }

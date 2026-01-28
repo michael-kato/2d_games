@@ -2,25 +2,24 @@ using UnityEngine;
 
 public class TentacleController : MonoBehaviour
 {
-    [Header("References")]
+    private Camera _mainCamera;
+    private Vector3 _defaultPosition;
+
+    [Header("IK Constraints")]
+    public float maxReach; // The actual length of your tentacle sprite
     public Transform ikTarget;
-
-
-    [Header("Movement")]
-    public float movementRadius = 4f;
-    public float idleSpeed = 0.5f;
-    public float followSpeed = 2.0f; // Faster when following mouse
+    
+    [Header("Behaviors")]
+    public float speed = 0.5f;
     public float decisionInterval;
 
-    [Header("Behaviors")]
-    [Range(0, 1)] public float mouseFollowChance = 0.33f;
+    [Range(0, 1)] public float mouseFollowChance = 0.03f;
 
-    private Vector3 currentDestination;
-    private float timer;
-    private bool isFollowingMouse = false;
-    private Camera _mainCamera;
-    
-    private Vector3 _defaultPosition;
+    private Vector3 _currentDestination;
+    private float _timer;
+    private bool _isFollowingMouse;
+    public bool isEating;
+
 
     void Start()
     {
@@ -28,55 +27,53 @@ public class TentacleController : MonoBehaviour
         _defaultPosition = ikTarget.transform.position;
         _defaultPosition.y -= 0.3f;
         
+        maxReach = Vector3.Distance(transform.position, ikTarget.transform.position);
+        
         // Offset the start timer so all tentacles don't think at once
-        decisionInterval =- Random.Range(2, 5);
-        timer = Random.Range(0, decisionInterval);
+        decisionInterval = Random.Range(2, 5);
+        _timer = Random.Range(0, decisionInterval);
         PickNewBehavior();
     }
 
     void Update()
     {
-        timer += Time.deltaTime;
+        if (isEating) return;
+        
+        _timer += Time.deltaTime;
 
-        if (timer >= decisionInterval)
+        if (_timer >= decisionInterval)
         {
             PickNewBehavior();
-            timer = 0;
+            _timer = 0;
         }
 
-        float activeSpeed = idleSpeed;
-
-        if (isFollowingMouse)
+        if (_isFollowingMouse)
         {
-            // Update destination to mouse position
-            currentDestination = GetMouseWorldPos();
-            activeSpeed = followSpeed;
-            
-            // Constraint: Don't let it stretch too far from anchor
-            currentDestination = ClampToRadius(currentDestination);
+            _currentDestination = GetMouseWorldPos();
         }
-
-        // Smoothly move the IK Handle
-        ikTarget.position = Vector3.Lerp(ikTarget.position, currentDestination, Time.deltaTime * activeSpeed);
+        
+        // don't let the tentacle reach past it's max length
+        _currentDestination = ClampToRadius(_currentDestination);
+        
+        ikTarget.position = Vector3.Lerp(ikTarget.position, _currentDestination, Time.deltaTime * speed);
     }
 
     void PickNewBehavior()
     {
         // The "1/3 of the time" roll
-        isFollowingMouse = Random.value < mouseFollowChance;
+        _isFollowingMouse = Random.value < mouseFollowChance;
 
-        if (!isFollowingMouse)
+        if (!_isFollowingMouse)
         {
             // Pick a random idle point
-            Vector2 randomCircle = Random.insideUnitCircle * movementRadius;
-            currentDestination = _defaultPosition + (Vector3)randomCircle;
+            _currentDestination = _defaultPosition + (Vector3)Random.insideUnitCircle;
         }
     }
 
     Vector3 ClampToRadius(Vector3 target)
     {
         Vector3 offset = target - _defaultPosition;
-        return _defaultPosition + Vector3.ClampMagnitude(offset, movementRadius);
+        return _defaultPosition + Vector3.ClampMagnitude(offset, maxReach);
     }
 
     Vector3 GetMouseWorldPos()
@@ -90,6 +87,6 @@ public class TentacleController : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(_defaultPosition, movementRadius);
+        Gizmos.DrawWireSphere(_defaultPosition, maxReach);
     }
 }

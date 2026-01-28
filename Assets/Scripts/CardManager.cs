@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class CardManager : MonoBehaviour, IPointerClickHandler
 {
-    
+    [SerializeField] GameObject lootDrop;
     private bool _isSelected;
     float speed = 0.2f;
     private bool _isRotating;
@@ -15,6 +15,7 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
     public Sprite backSprite;
     private Transform _cameraTransform;
     private Animator _animator;
+    
     
     void Start()
     {
@@ -77,9 +78,14 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         var vfx = GetComponent<ParticleSystem>();
         vfx.Play();
         yield return new WaitForSeconds(0.3f);
+        
+        // disable visual
         _imageComponent.sprite = null;
         _imageComponent.material = null;
         _imageComponent.color = new Color(0,0,0,0);
         this.enabled = false;
+        
+        // drop loot!
+        lootDrop.SetActive(true);
     }
 }

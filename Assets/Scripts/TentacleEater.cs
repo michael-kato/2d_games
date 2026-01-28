@@ -1,15 +1,17 @@
+using System.Collections;
 using UnityEngine;
 
 public class TentacleEater : MonoBehaviour
 {
-    [Header("Settings")]
-    public float swallowDistance = 0.1f; // Distance to "mouth" before it disappears
-    public float grabStrength = 5f;     // How fast it pulls the food in
-    public string foodTag = "Prize";
+    public float swallowDistance = 0.01f; // Distance to "mouth" before it disappears
+    public float grabStrength = 1.0f;
+    public string foodTag = "Loot";
 
     private Transform currentFood;
-    private TentacleController _tentacleController; // Reference to your existing movement script
-
+    private TentacleController _tentacleController;
+    
+    private WaitForSeconds slowDownDelay = new WaitForSeconds(0.2f);
+    private WaitForSeconds eatDelay = new WaitForSeconds(2f);
     void Start()
     {
         _tentacleController = GetComponentInParent<TentacleController>();
@@ -19,22 +21,19 @@ public class TentacleEater : MonoBehaviour
     {
         if (currentFood != null)
         {
-            // 1. Move the food precisely to the IK tip
-            currentFood.position = Vector3.Lerp(currentFood.position, transform.position, Time.deltaTime * grabStrength);
-
-            // 2. Check if the food has reached the "mouth" (the anchor point)
-            float distToAnchor = Vector3.Distance(currentFood.position, _tentacleController.ikTarget.position);
+            // snatch up the food
+            _tentacleController.ikTarget.position = Vector3.Lerp(_tentacleController.ikTarget.position, currentFood.position, Time.deltaTime * grabStrength);
             
-            if (distToAnchor < swallowDistance)
+            float distToMouth = Vector3.Distance(currentFood.position, _tentacleController.ikTarget.position);
+            if (distToMouth < swallowDistance)
             {
-                Swallow(currentFood.gameObject);
+                StartCoroutine(Swallow(currentFood.gameObject));
             }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Only grab if we aren't already eating and it's the right kind of object
         if (currentFood == null && collision.CompareTag(foodTag))
         {
             GrabFood(collision.transform);
@@ -48,23 +47,32 @@ public class TentacleEater : MonoBehaviour
         // Disable physics on the tile so it doesn't fight the tentacle
         if (food.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
         {
-            rb.simulated = false;
+            StartCoroutine(StopFood(rb));
         }
 
-        // Optional: Force the tentacle into "Retract" mode
-        // This makes the tentacle pull back toward the wall once it has food
-        _tentacleController.enabled = false; 
+        _tentacleController.isEating = true; 
     }
 
-    void Swallow(GameObject food)
+    IEnumerator StopFood(Rigidbody2D food)
     {
+        food.drag = 10f;
+        food.angularDrag = 5f;
+        food.gravityScale = 0.5f; // Make it feel lighter once grabbed
+        yield return slowDownDelay;
+    }
+
+    IEnumerator Swallow(GameObject food)
+    {
+        // TODO: play eating vfx 
+        
+        yield return eatDelay;
+
         Destroy(food);
         currentFood = null;
         
-        // Re-enable the random wandering logic
-        _tentacleController.enabled = true;
-
         // Trigger a "Chomp" VFX or Screen Shake here!
         Debug.Log("Nom!");
+        
+        _tentacleController.isEating = false; 
     }
 }
