@@ -25,7 +25,7 @@ public class TentacleEater : MonoBehaviour
             _tentacleController.ikTarget.position = Vector3.Lerp(_tentacleController.ikTarget.position, currentFood.position, Time.deltaTime * grabStrength);
             
             float distToMouth = Vector3.Distance(currentFood.position, _tentacleController.ikTarget.position);
-            if (distToMouth < swallowDistance)
+            if (distToMouth < swallowDistance && !_tentacleController.isEating)
             {
                 StartCoroutine(Swallow(currentFood.gameObject));
             }
@@ -49,30 +49,37 @@ public class TentacleEater : MonoBehaviour
         {
             StartCoroutine(StopFood(rb));
         }
-
-        _tentacleController.isEating = true; 
     }
 
     IEnumerator StopFood(Rigidbody2D food)
     {
         food.drag = 10f;
-        food.angularDrag = 5f;
-        food.gravityScale = 0.5f; // Make it feel lighter once grabbed
+        food.gravityScale = 0.1f;
         yield return slowDownDelay;
     }
 
     IEnumerator Swallow(GameObject food)
     {
+        currentFood = null;
+        _tentacleController.isEating = true;
+
         // TODO: play eating vfx 
+        var system = food.GetComponent<ParticleSystem>();
+        system.Play();
         
-        yield return eatDelay;
+        yield return new WaitWhile(() => system.IsAlive(true));
 
         Destroy(food);
-        currentFood = null;
         
         // Trigger a "Chomp" VFX or Screen Shake here!
         Debug.Log("Nom!");
         
         _tentacleController.isEating = false; 
+    }
+
+    IEnumerable PlayVFX(ParticleSystem vfx)
+    {
+        vfx.Play();
+        yield return null;
     }
 }
