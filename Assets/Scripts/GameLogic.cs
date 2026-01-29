@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
-using MyExtensions;
 using UnityEngine.UI;
+
+using SlotsExtensions;
+
 
 public class GameLogic : MonoBehaviour
 {
@@ -96,8 +98,8 @@ public class GameLogic : MonoBehaviour
                 cm.backSprite = sprite;
                 
                 // debug, remove
-                Image img = card.GetComponent<Image>();
-                img.sprite = sprite;
+                //Image img = card.GetComponent<Image>();
+                //img.sprite = sprite;
 
             }
         }

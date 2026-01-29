@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace MyExtensions
+namespace SlotsExtensions
     {
     public static class ListExtensions
     {

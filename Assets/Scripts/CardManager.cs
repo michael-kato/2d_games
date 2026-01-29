@@ -25,6 +25,8 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         
         float randomOffset = Random.Range(0f, 1f);
         _animator.Play("card_idle", 0, randomOffset);
+        
+        lootDrop.GetComponent<SpriteRenderer>().sprite = backSprite;
     }
     
     void Update()

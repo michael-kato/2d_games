@@ -27,7 +27,7 @@ public class TentacleController : MonoBehaviour
         _defaultPosition = ikTarget.transform.position;
         _defaultPosition.y -= 0.3f;
         
-        maxReach = Vector3.Distance(transform.position, ikTarget.transform.position);
+        maxReach = Vector3.Distance(transform.position, ikTarget.transform.position) * 0.5f;
         
         // Offset the start timer so all tentacles don't think at once
         decisionInterval = Random.Range(2, 5);

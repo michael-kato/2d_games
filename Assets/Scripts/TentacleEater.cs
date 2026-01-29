@@ -11,7 +11,6 @@ public class TentacleEater : MonoBehaviour
     private TentacleController _tentacleController;
     
     private WaitForSeconds slowDownDelay = new WaitForSeconds(0.2f);
-    private WaitForSeconds eatDelay = new WaitForSeconds(2f);
     void Start()
     {
         _tentacleController = GetComponentInParent<TentacleController>();
