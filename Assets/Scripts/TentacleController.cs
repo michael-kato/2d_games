@@ -18,9 +18,15 @@ public class TentacleController : MonoBehaviour
     private Vector3 _currentDestination;
     private float _timer;
     private bool _isFollowingMouse;
-    public bool isEating;
+    public bool canEat;
 
 
+    void OnEnable() { GameLogic.OnGameStarted += EnableHunting; }
+    void OnDisable() { GameLogic.OnGameStarted -= EnableHunting; }
+
+    void EnableHunting() { canEat = true; }
+    void DisableHunting() { canEat = false; }
+    
     void Start()
     {
         _mainCamera = Camera.main;
@@ -37,7 +43,7 @@ public class TentacleController : MonoBehaviour
 
     void Update()
     {
-        if (isEating) return;
+        if (!canEat) return;
         
         _timer += Time.deltaTime;
 

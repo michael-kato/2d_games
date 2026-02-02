@@ -9,35 +9,38 @@ using SlotsExtensions;
 
 public class GameLogic : MonoBehaviour
 {
-    [SerializeField] public Camera camera;
-    [SerializeField] public Canvas canvas;
     [SerializeField] public GameObject gridContainer;
     [SerializeField] public GameObject cellPrefab;
     [SerializeField] public GameObject cardPrefab;
     [SerializeField] public GameObject lootPrefab;
-    
+
     [SerializeField] public int difficulty = 1;
-    
+
     // List is just for animation
     [SerializeField] public List<Sprite> frontTiles;
-    
+
     // random tiles to use
     [SerializeField] public List<Sprite> backTiles;
     [SerializeField] public Sprite fillerTile;
 
     private Sprite _frontTile;
-    [ItemCanBeNull] private List<List<Sprite>> _tileLayout;
     private static List<GameObject> _flippedTiles;
 
+    private List<Transform> _cellTransforms = new List<Transform>();
+
+    public delegate void GameReadyAction();
+    public static event GameReadyAction OnGameStarted;
+    
+    
     public static void CheckGuess(GameObject card)
     {
         _flippedTiles.Add(card);
-        
+
         if (_flippedTiles.Count == 2)
         {
             CardManager cm1 = _flippedTiles[0].GetComponent<CardManager>();
             CardManager cm2 = _flippedTiles[1].GetComponent<CardManager>();
-            
+
             // check matches
             if (_flippedTiles[0].name == _flippedTiles[1].name)
             {
@@ -50,21 +53,21 @@ public class GameLogic : MonoBehaviour
                 cm1.Reset();
                 cm2.Reset();
             }
-            
+
             _flippedTiles.Clear();
         }
     }
-    
+
     IEnumerator Start()
     {
         _flippedTiles = new List<GameObject>();
-        
+
         _frontTile = frontTiles[0];
         int numDuplicates = 1 + difficulty;
         int numTilesGuessable = backTiles.Count * numDuplicates;
         int gridSize = Mathf.CeilToInt(Mathf.Sqrt(numTilesGuessable));
         int totalTiles = gridSize * gridSize;
-        
+
         // fill list with some of each type of sprite available
         List<Sprite> allPossibleSprites = new List<Sprite>();
         foreach (Sprite sprite in backTiles)
@@ -74,72 +77,201 @@ public class GameLogic : MonoBehaviour
                 allPossibleSprites.Add(sprite);
             }
         }
+
         // fill remaining places with generic cards
         while (allPossibleSprites.Count < totalTiles)
         {
             allPossibleSprites.Add(fillerTile);
         }
-        
+
         // shuffle!
         allPossibleSprites.Shuffle();
-        
+
         // initialize random tiles
-        _tileLayout = new List<List<Sprite>>();
         for (int y = 0; y < gridSize; y++)
         {
-            _tileLayout.Add(new List<Sprite>(gridSize));
             for (int x = 0; x < gridSize; x++)
             {
-                // sprite setup
                 Sprite sprite = allPossibleSprites[x + y];
-                _tileLayout[y].Add(sprite);
 
                 GameObject cell = Instantiate(cellPrefab, gridContainer.transform);
                 GameObject card = Instantiate(cardPrefab, cell.transform);
+
+                _cellTransforms.Add(cell.transform);
+                
+                // CRITICAL: Set scale to zero immediately so they are ready to animate
+                cell.transform.localScale = Vector3.zero;
+
                 card.name = sprite.name;
                 CardManager cm = card.GetComponent<CardManager>();
                 cm.frontSprite = _frontTile;
                 cm.backSprite = sprite;
-                
-                // DEBUG
-                Image img = card.GetComponent<Image>();
-                img.sprite = sprite;
 
+                // debug
+                //Image img = card.GetComponent<Image>();
+                //img.sprite = sprite;
             }
         }
 
-        Debug.Log(gridContainer.GetComponentCount());
-        
-        // Wait until the UI is definitely finished moving
+        // Wait for Grid Layout to calculate
         yield return new WaitForEndOfFrame();
-
-        foreach(CardManager card in gridContainer.GetComponentsInChildren<CardManager>())
+        
+        // ANIMATE CARDS
+        foreach (Transform cell in _cellTransforms)
         {
-            SpawnLoot(card);
+            StartCoroutine(AnimateCardAndLoot(cell));
+            yield return new WaitForSeconds(0.05f);
         }
-    }
 
-    private void SpawnLoot(CardManager card)
-    {
-        RectTransform rect = card.gameObject.GetComponent<RectTransform>();
-        Vector3 cardLocalPos = rect.localPosition; 
-        Vector3 containerPos = gridContainer.GetComponent<Transform>().localPosition;
-        
-        // get a vector from the bottom left corner to the center of the canvas
-        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
-        Vector3[] corners = new Vector3[4];
-        canvasRect.GetWorldCorners(corners);
-        Vector3 bottomLeft = corners[0];
-        Vector3 resultVector = containerPos - bottomLeft;
+        // drop loot
+        foreach (Transform cell in _cellTransforms)
+        {
+            StartCoroutine(DropLootRoutine(cell));
+            yield return new WaitForSeconds(0.05f);
+        }
 
-        Vector3 worldPos = camera.ScreenToWorldPoint(cardLocalPos);
-        Vector3 offset = worldPos + resultVector;
-        offset.z = 0;
+        // WAIT FOR ALL ANIMATIONS TO FINISH
+        yield return new WaitForSeconds(_cellTransforms.Count * 0.07f);
+
+        // SHUFFLE THE CELLS
+        yield return StartCoroutine(SlidingShuffleRoutine());
         
-        GameObject loot = Instantiate(lootPrefab, offset, Quaternion.identity);
-        loot.GetComponent<SpriteRenderer>().sprite = card.GetComponent<Image>().sprite;
-        card.lootDrop = loot;
+        OnGameStarted?.Invoke();
     }
     
+    IEnumerator AnimateCardAndLoot(Transform cell)
+    {
+        // 1. POP IN THE CARD
+        float duration = 0.4f;
+        float elapsed = 0f;
+        
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float percent = elapsed / duration;
+            float curve = Mathf.Sin(percent * Mathf.PI * 0.85f) * 1.15f;
+            cell.localScale = Vector3.one * curve;
+            yield return null;
+        }
+
+        if(cell != null) cell.localScale = Vector3.one;
+
+    }
+
+    IEnumerator DropLootRoutine(Transform cell)
+    {
+        Vector3 targetPos = GetWorldPosForLoot(cell);
+        Vector3 spawnPos = Vector3.up * 5f; // todo: 
+
+        GameObject loot = Instantiate(lootPrefab, spawnPos, Quaternion.identity);
+        
+        var card = cell.GetComponentInChildren<CardManager>();
+        loot.GetComponent<SpriteRenderer>().sprite = card.backSprite;
+        card.lootDrop = loot;
+
+        // Drop 
+        float dropDur = 0.5f;
+        float t = 0;
+        while (t < 1.0f)
+        {
+            t += Time.deltaTime / dropDur;
+            // Ease in
+            float smoothT = t * t;
+            loot.transform.position = Vector3.Lerp(spawnPos, targetPos, smoothT);
+            yield return null;
+        }
+
+        card.gameObject.GetComponent<Image>().sprite = card.backSprite;
+        loot.SetActive(false);
+        
+        // hide the loot!
+        card.Reset();
+
+    }
+    
+    private IEnumerator SlidingShuffleRoutine()
+    {
+        // 1. Setup Data Structures
+        Dictionary<Transform, Vector3> targetLocalPositions = new Dictionary<Transform, Vector3>();
+        List<Transform> cells = new List<Transform>();
+        
+        // We need to keep track of which loot belongs to which cell/card
+        Dictionary<Transform, GameObject> cellToLoot = new Dictionary<Transform, GameObject>();
+
+        foreach (Transform cell in gridContainer.transform)
+        {
+            targetLocalPositions[cell] = cell.localPosition;
+            cells.Add(cell);
+
+            // Find the loot associated with this cell's card
+            CardManager cm = cell.GetComponentInChildren<CardManager>();
+            if (cm != null && cm.lootDrop != null)
+            {
+                cellToLoot[cell] = cm.lootDrop;
+                // Ensure loot is INACTIVE during shuffle so gravity doesn't take it
+                cm.lootDrop.SetActive(false);
+            }
+        }
+
+        // 3. Randomize the mapping
+        List<Vector3> shuffledPositions = new List<Vector3>(targetLocalPositions.Values);
+        for (int i = 0; i < shuffledPositions.Count; i++)
+        {
+            Vector3 temp = shuffledPositions[i];
+            int randomIndex = Random.Range(i, shuffledPositions.Count);
+            shuffledPositions[i] = shuffledPositions[randomIndex];
+            shuffledPositions[randomIndex] = temp;
+        }
+
+        // 4. Animate the Slide
+        float duration = 0.8f;
+        float elapsed = 0f;
+        Dictionary<Transform, Vector3> startLocalPositions = new Dictionary<Transform, Vector3>();
+        
+        foreach(var cell in cells) 
+            startLocalPositions[cell] = cell.localPosition;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            float smoothT = t * t * (3f - 2f * t); // SmoothStep
+
+            for (int i = 0; i < cells.Count; i++)
+            {
+                Transform currentCell = cells[i];
+                
+                // Move the Cell (UI)
+                currentCell.localPosition = Vector3.Lerp(startLocalPositions[currentCell], shuffledPositions[i], smoothT);
+                
+                // Move the Loot (World Space) to match the card's new position
+                if (cellToLoot.ContainsKey(currentCell))
+                {
+                    // card.position is the world space center of the UI element
+                    Vector3 cardWorldPos = currentCell.GetChild(0).position; 
+                    cardWorldPos.z = 0; 
+                    cellToLoot[currentCell].transform.position = cardWorldPos;
+                }
+            }
+            yield return null;
+        }
+
+        // 5. Cleanup
+        for (int i = 0; i < cells.Count; i++)
+        {
+            cells[i].localPosition = shuffledPositions[i];
+            
+        }
+    }
+    
+    private Vector3 GetWorldPosForLoot(Transform card)
+    {
+        // Get the card's world position (which works in Screen Space - Camera)
+        Vector3 worldPos = card.position;
+        worldPos.z = 0; // Ensure it's on the gameplay plane
+        return worldPos;
+    }
 }
+
+
 

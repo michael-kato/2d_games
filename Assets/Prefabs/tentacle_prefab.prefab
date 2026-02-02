@@ -82,7 +82,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.5
 --- !u!1 &923686635315478269
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,13 +193,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c12a66aafe9ac5041a7aad767951a32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxReach: 0
   ikTarget: {fileID: 2124674879866310893}
-  movementRadius: 4
-  idleSpeed: 0.5
-  followSpeed: 2
+  speed: 0.5
   decisionInterval: 0
   mouseFollowChance: 0.33
-  isEating: 0
+  canEat: 0
 --- !u!1 &2682668330095450454
 GameObject:
   m_ObjectHideFlags: 0

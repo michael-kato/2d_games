@@ -21,19 +21,27 @@ public class TentacleEater : MonoBehaviour
         if (currentFood != null)
         {
             // snatch up the food
-            _tentacleController.ikTarget.position = Vector3.Lerp(_tentacleController.ikTarget.position, currentFood.position, Time.deltaTime * grabStrength);
+            var t = Time.deltaTime * grabStrength;
+            _tentacleController.ikTarget.position = Vector3.MoveTowards(_tentacleController.ikTarget.position, currentFood.position, t);
             
-            float distToMouth = Vector3.Distance(currentFood.position, _tentacleController.ikTarget.position);
-            if (distToMouth < swallowDistance && !_tentacleController.isEating)
+            // we use vector2 specifically because the z axis is irrelevant here
+            float distToMouth = Vector2.Distance(currentFood.position, _tentacleController.ikTarget.position);
+            if (distToMouth < swallowDistance && _tentacleController.canEat)
             {
-                StartCoroutine(Swallow(currentFood.gameObject));
+                // snap to
+                currentFood.position = _tentacleController.ikTarget.position;
+                StartCoroutine(Swallow(currentFood));
             }
+        }
+        else
+        {
+            Debug.Log("No food found");
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (currentFood == null && collision.CompareTag(foodTag))
+        if (currentFood == null && collision.CompareTag(foodTag) && _tentacleController.canEat)
         {
             GrabFood(collision.transform);
         }
@@ -53,14 +61,14 @@ public class TentacleEater : MonoBehaviour
     IEnumerator StopFood(Rigidbody2D food)
     {
         food.drag = 10f;
-        food.gravityScale = 0.5f;
+        food.gravityScale = 0.1f;
         yield return slowDownDelay;
     }
 
-    IEnumerator Swallow(GameObject food)
+    IEnumerator Swallow(Transform food)
     {
         currentFood = null;
-        _tentacleController.isEating = true;
+        _tentacleController.canEat = false;
         
         if (CameraShake.Instance != null)
         {
@@ -68,21 +76,15 @@ public class TentacleEater : MonoBehaviour
         }
         
         var system = food.GetComponent<ParticleSystem>();
-        if (system == null) {
-            Debug.LogError("VFX Missing on " + food.name);
-        } else {
-            Debug.Log("VFX Found and Playing on " + food.name);
-            system.Play();
-        }
+        system.Play();
         
-        yield return new WaitWhile(() => system.IsAlive(true));
+        yield return new WaitForSeconds(2.0f);
 
-        Destroy(food);
+        Destroy(food.gameObject);
         
-        // Trigger a "Chomp" VFX or Screen Shake here!
         Debug.Log("Nom!");
         
-        _tentacleController.isEating = false; 
+        _tentacleController.canEat = true; 
     }
 
     IEnumerable PlayVFX(ParticleSystem vfx)
