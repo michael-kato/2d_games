@@ -53,7 +53,7 @@ public class TentacleEater : MonoBehaviour
     IEnumerator StopFood(Rigidbody2D food)
     {
         food.drag = 10f;
-        food.gravityScale = 0.1f;
+        food.gravityScale = 0.5f;
         yield return slowDownDelay;
     }
 
@@ -61,10 +61,19 @@ public class TentacleEater : MonoBehaviour
     {
         currentFood = null;
         _tentacleController.isEating = true;
-
-        // TODO: play eating vfx 
+        
+        if (CameraShake.Instance != null)
+        {
+            CameraShake.Instance.AddTrauma(10f);
+        }
+        
         var system = food.GetComponent<ParticleSystem>();
-        system.Play();
+        if (system == null) {
+            Debug.LogError("VFX Missing on " + food.name);
+        } else {
+            Debug.Log("VFX Found and Playing on " + food.name);
+            system.Play();
+        }
         
         yield return new WaitWhile(() => system.IsAlive(true));
 

@@ -5,50 +5,63 @@ public class ParallaxManager : MonoBehaviour
 {
     [Header("Settings")]
     public float amount = 10f;
-    public float layerDifference = 0.1f;
+    public float layerDifference = 1f;
     public float smoothSpeed = 2f;
-    public GameObject bg1;
-    public GameObject bg2;
-    public GameObject bg3;
+    public float maxClamp = 10f; // Maximum world units it can travel
     
-    private Transform _bg1;
-    private Transform _bg2;
-    private Transform _bg3;
-    private List<Transform> _updates;
-    
-    private Vector3 _defaultPosition;
-    private Vector3 _parallaxPosition;
+    public List<Transform> layers;
+    private List<Vector3> _startPositions;
 
     void Start()
     {
-        _bg1 = bg1.transform;
-        _bg2 = bg2.transform;
-        _bg3 = bg3.transform;
-        _updates = new List<Transform>() {_bg1, _bg2, _bg3};
+        _startPositions = new List<Vector3>();
+        foreach (Transform t in layers)
+        {
+            _startPositions.Add(t.position);
+        }
     }
 
     void Update()
     {
-        // 1. Get Mouse Offset from the center of the screen
-        Vector3 mousePos = Input.mousePosition;
-        float xOffset = (mousePos.x - (Screen.width / 2)) / Screen.width;
-        float yOffset = (mousePos.y - (Screen.height / 2)) / Screen.height;
+        Vector3 targetOffset = Vector3.zero;
 
-        for (int i = 0; i < _updates.Count; i++)
+        // 1. Check if mouse is inside the game window
+        if (IsMouseInWindow())
         {
-            Transform t = _updates[i];
+            // Get Mouse Offset (-0.5 to 0.5)
+            float xOffset = (Input.mousePosition.x / Screen.width) - 0.5f;
+            float yOffset = (Input.mousePosition.y / Screen.height) - 0.5f;
 
-            float a = amount + layerDifference * i;
-            
-            _defaultPosition.z = t.position.z;
-            _parallaxPosition = new Vector3(xOffset * a, yOffset * a, 0);
-                
-            // 2. Calculate the new target position
-            Vector3 targetPos = _defaultPosition - new Vector3(xOffset * a, yOffset * a, 0);
-
-            // 3. Smoothly move (Lerp) to the target
-            t.position = Vector3.Lerp(_defaultPosition, targetPos, Time.deltaTime * smoothSpeed);
-            
+            // We calculate the raw offset before applying it to layers
+            targetOffset = ClampParallax(new Vector3(xOffset, yOffset, 0));
         }
+        // If mouse is out, targetOffset remains Vector3.zero (the center)
+
+        for (int i = 0; i < layers.Count; i++)
+        {
+            float intensity = amount + (i * layerDifference);
+            
+            // 2. Apply intensity and Clamp the total movement
+            Vector3 desiredMove =  ClampParallax(targetOffset * intensity);
+            
+            // 3. Target is Start + Clamped Offset
+            Vector3 targetPos = _startPositions[i] + desiredMove;
+
+            // 4. Smooth Move from CURRENT position to TARGET position
+            layers[i].localPosition = Vector3.Lerp(layers[i].localPosition, targetPos, Time.deltaTime * smoothSpeed);
+        }
+    }
+
+    private bool IsMouseInWindow()
+    {
+        Vector3 mp = Input.mousePosition;
+        return mp.x >= 0 && mp.x <= Screen.width && mp.y >= 0 && mp.y <= Screen.height;
+    }
+
+    private Vector3 ClampParallax(Vector3 v)
+    {
+        v.x = Mathf.Clamp(v.x, -maxClamp, maxClamp);
+        v.y = Mathf.Clamp(v.y, -maxClamp, maxClamp);
+        return v;
     }
 }

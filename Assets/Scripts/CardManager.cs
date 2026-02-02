@@ -1,4 +1,5 @@
 using System.Collections;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,27 +7,27 @@ using UnityEngine.UI;
 
 public class CardManager : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] GameObject lootDrop;
+    public GameObject lootDrop;
     private bool _isSelected;
-    float speed = 0.2f;
     private bool _isRotating;
     private Image _imageComponent;
     public Sprite frontSprite;
     public Sprite backSprite;
-    private Transform _cameraTransform;
     private Animator _animator;
+    private Image _cellImage;
     
     
     void Start()
     {
         _imageComponent = GetComponent<Image>();
-        _cameraTransform = Camera.main.transform;
         _animator = GetComponent<Animator>();
         
         float randomOffset = Random.Range(0f, 1f);
         _animator.Play("card_idle", 0, randomOffset);
         
-        lootDrop.GetComponent<SpriteRenderer>().sprite = backSprite;
+        //_lootDrop.GetComponent<SpriteRenderer>().sprite = backSprite;
+
+        _cellImage = this.GetComponentInParent<Image>();
     }
     
     void Update()
@@ -44,8 +45,9 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         }
     }
     
-    public void SwapSprite() {
-        _imageComponent.sprite = _isSelected ? backSprite : frontSprite;
+    public void SwapSprite()
+    {
+        _imageComponent.sprite = _imageComponent.sprite == frontSprite ? backSprite : frontSprite;
     }
     
     public void Reset()
@@ -85,6 +87,9 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         _imageComponent.sprite = null;
         _imageComponent.material = null;
         _imageComponent.color = new Color(0,0,0,0);
+        _cellImage.sprite = null;
+        _cellImage.material = null;
+        _cellImage.color = new Color(0,0,0,0);
         this.enabled = false;
         
         // drop loot!
