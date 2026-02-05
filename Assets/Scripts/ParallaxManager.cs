@@ -25,30 +25,25 @@ public class ParallaxManager : MonoBehaviour
     {
         Vector3 targetOffset = Vector3.zero;
 
-        // 1. Check if mouse is inside the game window
         if (IsMouseInWindow())
         {
-            // Get Mouse Offset (-0.5 to 0.5)
+            // Get Mouse Offset
             float xOffset = (Input.mousePosition.x / Screen.width) - 0.5f;
             float yOffset = (Input.mousePosition.y / Screen.height) - 0.5f;
 
-            // We calculate the raw offset before applying it to layers
             targetOffset = ClampParallax(new Vector3(xOffset, yOffset, 0));
         }
-        // If mouse is out, targetOffset remains Vector3.zero (the center)
 
         for (int i = 0; i < layers.Count; i++)
         {
             float intensity = amount + (i * layerDifference);
-            
-            // 2. Apply intensity and Clamp the total movement
             Vector3 desiredMove =  ClampParallax(targetOffset * intensity);
-            
-            // 3. Target is Start + Clamped Offset
             Vector3 targetPos = _startPositions[i] + desiredMove;
 
-            // 4. Smooth Move from CURRENT position to TARGET position
-            layers[i].localPosition = Vector3.Lerp(layers[i].localPosition, targetPos, Time.deltaTime * smoothSpeed);
+            var t = layers[i].localPosition;
+            targetPos.z = t.z; // preserve the z-offset
+
+            layers[i].localPosition = Vector3.Lerp(t, targetPos, Time.deltaTime * smoothSpeed);
         }
     }
 

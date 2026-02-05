@@ -11,6 +11,7 @@ public class TentacleEater : MonoBehaviour
     private TentacleController _tentacleController;
     
     private WaitForSeconds slowDownDelay = new WaitForSeconds(0.2f);
+
     void Start()
     {
         _tentacleController = GetComponentInParent<TentacleController>();
@@ -29,13 +30,9 @@ public class TentacleEater : MonoBehaviour
             if (distToMouth < swallowDistance && _tentacleController.canEat)
             {
                 // snap to
-                currentFood.position = _tentacleController.ikTarget.position;
+                _tentacleController.ikTarget.position = currentFood.position;
                 StartCoroutine(Swallow(currentFood));
             }
-        }
-        else
-        {
-            Debug.Log("No food found");
         }
     }
 
@@ -60,14 +57,13 @@ public class TentacleEater : MonoBehaviour
 
     IEnumerator StopFood(Rigidbody2D food)
     {
-        food.drag = 10f;
+        food.linearDamping = 10f;
         food.gravityScale = 0.1f;
         yield return slowDownDelay;
     }
 
     IEnumerator Swallow(Transform food)
     {
-        currentFood = null;
         _tentacleController.canEat = false;
         
         if (CameraShake.Instance != null)
@@ -77,19 +73,24 @@ public class TentacleEater : MonoBehaviour
         
         var system = food.GetComponent<ParticleSystem>();
         system.Play();
-        
-        yield return new WaitForSeconds(2.0f);
 
+        var scale = food.localScale;
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                scale *= 0.9f;
+                food.localScale = scale;
+                yield return new WaitForSeconds(0.02f);
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        currentFood = null;
         Destroy(food.gameObject);
         
         Debug.Log("Nom!");
         
         _tentacleController.canEat = true; 
-    }
-
-    IEnumerable PlayVFX(ParticleSystem vfx)
-    {
-        vfx.Play();
-        yield return null;
     }
 }

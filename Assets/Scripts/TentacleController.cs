@@ -20,6 +20,8 @@ public class TentacleController : MonoBehaviour
     private bool _isFollowingMouse;
     public bool canEat;
 
+    public Transform tipBone; 
+    public Transform secondToLastBone;
 
     void OnEnable() { GameLogic.OnGameStarted += EnableHunting; }
     void OnDisable() { GameLogic.OnGameStarted -= EnableHunting; }
@@ -39,6 +41,28 @@ public class TentacleController : MonoBehaviour
         decisionInterval = Random.Range(2, 5);
         _timer = Random.Range(0, decisionInterval);
         PickNewBehavior();
+        
+        // Start from the root of the tentacle and find the deepest child
+        tipBone = GetDeepestChild(transform);
+    
+        // The second-to-last bone is simply the tip's parent
+        if (tipBone != null)
+        {
+            secondToLastBone = tipBone.parent;
+        }
+    }
+
+    private Transform GetDeepestChild(Transform parent)
+    {
+        Transform lastChild = parent;
+    
+        // Keep diving down until we find a transform with no children
+        while (lastChild.childCount > 0)
+        {
+            lastChild = lastChild.GetChild(0);
+        }
+    
+        return lastChild;
     }
 
     void Update()
@@ -89,6 +113,22 @@ public class TentacleController : MonoBehaviour
         return p;
     }
 
+    
+    void LateUpdate() // Use LateUpdate so IK has finished calculating positions
+    {
+        Vector3 direction = (tipBone.position - secondToLastBone.position).normalized;
+
+        // 3. For 2D: Point the Tip's 'Right' or 'Up' at the direction
+        // Most 2D sprites point 'Right' (X-axis) by default
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        
+        Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
+        
+        ikTarget.rotation = targetRotation;
+    }
+    
+    
+    
     // Visualize the reach in the editor
     private void OnDrawGizmosSelected()
     {
