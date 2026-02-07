@@ -23,8 +23,8 @@ public class TentacleController : MonoBehaviour
     public Transform tipBone; 
     public Transform secondToLastBone;
 
-    void OnEnable() { GameLogic.OnGameStarted += EnableHunting; }
-    void OnDisable() { GameLogic.OnGameStarted -= EnableHunting; }
+    void OnEnable() { GameManager.OnGameStarted += EnableHunting; }
+    void OnDisable() { GameManager.OnGameStarted -= EnableHunting; }
 
     void EnableHunting() { canEat = true; }
     void DisableHunting() { canEat = false; }

@@ -1,36 +1,70 @@
 using System.Collections.Generic;
 using System.Collections;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
 using SlotsExtensions;
+using UnityEngine.Rendering;
 
 
-public class GameLogic : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+    [SerializeField] bool debug;
+    
     [SerializeField] public GameObject gridContainer;
     [SerializeField] public GameObject cellPrefab;
     [SerializeField] public GameObject cardPrefab;
     [SerializeField] public GameObject lootPrefab;
-
+    [SerializeField] public GameObject CthulhuPrefab;
+    
     [SerializeField] public int difficulty = 1;
-
-    // List is just for animation
-    [SerializeField] public List<Sprite> frontTiles;
 
     // random tiles to use
     [SerializeField] public List<Sprite> backTiles;
     [SerializeField] public Sprite fillerTile;
 
-    private Sprite _frontTile;
+    [SerializeField] private Sprite _mysteryTile;
     private static List<GameObject> _flippedTiles;
 
     private List<Transform> _cellTransforms = new List<Transform>();
 
+    
+    
+    private int _score;
+    public int Score     {
+        get { return _score; }
+        set
+        {
+            _score = value;
+            CheckScore();
+        }
+    }
+    
+    // events
     public delegate void GameReadyAction();
     public static event GameReadyAction OnGameStarted;
     
+    public delegate void SummonCthulhuAction();
+    public static event SummonCthulhuAction OnSummonCthulhu;
+    
+    // all the singleton ladies!
+    private static GameManager _instance;
+
+    private GameManager()
+    {
+    }
+
+    public static GameManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new GameManager();
+            }
+            return _instance;
+        }
+    }
     
     public static void CheckGuess(GameObject card)
     {
@@ -62,7 +96,6 @@ public class GameLogic : MonoBehaviour
     {
         _flippedTiles = new List<GameObject>();
 
-        _frontTile = frontTiles[0];
         int numDuplicates = 1 + difficulty;
         int numTilesGuessable = backTiles.Count * numDuplicates;
         int gridSize = Mathf.CeilToInt(Mathf.Sqrt(numTilesGuessable));
@@ -92,8 +125,9 @@ public class GameLogic : MonoBehaviour
         {
             for (int x = 0; x < gridSize; x++)
             {
-                Sprite sprite = allPossibleSprites[x + y];
-
+                Sprite revealSprite = allPossibleSprites[x + y];
+                
+                // ideally would pool these
                 GameObject cell = Instantiate(cellPrefab, gridContainer.transform);
                 GameObject card = Instantiate(cardPrefab, cell.transform);
 
@@ -102,14 +136,16 @@ public class GameLogic : MonoBehaviour
                 // CRITICAL: Set scale to zero immediately so they are ready to animate
                 cell.transform.localScale = Vector3.zero;
 
-                card.name = sprite.name;
+                card.name = revealSprite.name;
                 CardManager cm = card.GetComponent<CardManager>();
-                cm.frontSprite = _frontTile;
-                cm.backSprite = sprite;
+                cm.mysterySprite = _mysteryTile;
+                cm.revealSprite = revealSprite;
 
-                // debug
-                //Image img = card.GetComponent<Image>();
-                //img.sprite = sprite;
+                if (debug)
+                {
+                    Image img = card.GetComponent<Image>();
+                    img.sprite = revealSprite;
+                }
             }
         }
 
@@ -162,11 +198,12 @@ public class GameLogic : MonoBehaviour
     {
         Vector3 targetPos = GetWorldPosForLoot(cell);
         Vector3 spawnPos = Vector3.up * 5f; // todo: 
-
+        
+        // TODO: pool
         GameObject loot = Instantiate(lootPrefab, spawnPos, Quaternion.identity);
         
         var card = cell.GetComponentInChildren<CardManager>();
-        loot.GetComponent<SpriteRenderer>().sprite = card.backSprite;
+        loot.GetComponent<SpriteRenderer>().sprite = card.revealSprite;
         card.lootDrop = loot;
 
         // Drop 
@@ -181,7 +218,7 @@ public class GameLogic : MonoBehaviour
             yield return null;
         }
 
-        card.gameObject.GetComponent<Image>().sprite = card.backSprite;
+        card.gameObject.GetComponent<Image>().sprite = card.revealSprite;
         loot.SetActive(false);
         
         // hide the loot!
@@ -271,6 +308,15 @@ public class GameLogic : MonoBehaviour
         worldPos.z = 0; // Ensure it's on the gameplay plane
         return worldPos;
     }
+
+    private void CheckScore()
+    {
+        if (_score >= 10 || (debug  && _score >= 1))
+        {
+            OnSummonCthulhu?.Invoke();
+        }
+    }
+    
 }
 
 

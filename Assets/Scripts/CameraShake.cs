@@ -7,7 +7,7 @@ public class CameraShake : MonoBehaviour
     [Header("Settings")]
     public float shakeIntensity = 0.5f;
     public float shakeFrequency = 25f;
-    public float recoverySpeed = 1.5f; // How fast the shake stops
+    public float recoverySpeed = 1f; // How fast the shake stops
 
     private float _trauma = 0f;
     private Vector3 _initialPosition;

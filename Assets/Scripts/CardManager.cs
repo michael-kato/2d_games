@@ -1,5 +1,5 @@
 using System.Collections;
-using JetBrains.Annotations;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,46 +8,70 @@ using UnityEngine.UI;
 public class CardManager : MonoBehaviour, IPointerClickHandler
 {
     public GameObject lootDrop;
-    private bool _isSelected;
     private bool _isRotating;
     private Image _imageComponent;
-    public Sprite frontSprite;
-    public Sprite backSprite;
+    public Sprite mysterySprite;
+    public Sprite revealSprite;
+    private bool _isRevealed;
     private Animator _animator;
     private Image _cellImage;
+
+    [SerializeField] public List<Sprite> frames;
+    public float framesPerSecond = 12f;
+    private float _timer;
+    private int _index;
+
+    void Awake()
+    {
     
-    
+    _imageComponent = GetComponent<Image>();
+    _animator = GetComponent<Animator>();
+    float randomOffset = Random.Range(0f, 1f);
+    _animator.Play("card_idle", 0, randomOffset);
+        
+    //_lootDrop.GetComponent<SpriteRenderer>().sprite = backSprite;
+    _cellImage = GetComponentInParent<Image>();
+
+    }
+
     void Start()
     {
-        _imageComponent = GetComponent<Image>();
-        _animator = GetComponent<Animator>();
-        
-        float randomOffset = Random.Range(0f, 1f);
-        _animator.Play("card_idle", 0, randomOffset);
-        
-        //_lootDrop.GetComponent<SpriteRenderer>().sprite = backSprite;
-
-        _cellImage = this.GetComponentInParent<Image>();
     }
     
     void Update()
     {
+        if (_isRevealed) return;
         
+        _timer += Time.deltaTime;
+        if (_timer >= 1f / framesPerSecond)
+        {
+            _timer -= 1f / framesPerSecond;
+            _index = (_index + 1) % frames.Count; // Loop back to start
+            _imageComponent.sprite = frames[_index];
+        }
     }
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!_isSelected)
+        if (!_isRevealed)
         {
-            _isSelected = true;
+            _isRevealed = true;
             _animator.SetTrigger("OnClick");
-            GameLogic.CheckGuess(this.GameObject());
+            GameManager.CheckGuess(this.GameObject());
         }
     }
     
     public void SwapSprite()
     {
-        _imageComponent.sprite = _imageComponent.sprite == frontSprite ? backSprite : frontSprite;
+        if (_isRevealed)
+        {
+            _imageComponent.sprite = revealSprite;
+        }
+        else
+        {
+            _isRevealed = false;
+
+        }
     }
     
     public void Reset()
@@ -58,7 +82,7 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
 
     IEnumerator DoReset()
     {
-        _isSelected = false; 
+        _isRevealed = false; 
         yield return new WaitForSeconds(0.7f);
         
         _animator.SetFloat("FlipSpeed", -1);

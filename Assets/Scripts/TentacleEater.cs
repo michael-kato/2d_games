@@ -87,7 +87,8 @@ public class TentacleEater : MonoBehaviour
         }
 
         currentFood = null;
-        Destroy(food.gameObject);
+        Destroy(food.gameObject); // TODO: pool
+        GameManager.Instance.Score++;
         
         Debug.Log("Nom!");
         
