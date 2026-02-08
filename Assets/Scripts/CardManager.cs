@@ -45,15 +45,8 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
     
     public void SwapSprite()
     {
-        if (_isRevealed)
-        {
-            _image.sprite = revealSprite;
-        }
-        else
-        {
-            _image.sprite = mysterySprite;
-            Debug.Log($"{name} - revealing {mysterySprite.name}");
-        }
+        Debug.Log($"{name} - SwapSprite called. _isRevealed={_isRevealed}, sprite changing to: {(_isRevealed ? revealSprite.name : mysterySprite.name)}");
+        _image.sprite = _isRevealed ? revealSprite : mysterySprite;
     }
     
     public void Reset()
@@ -63,9 +56,10 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
 
     IEnumerator DoReset()
     {
-        _isRevealed = false; 
+        // small wait to give the player a chance to remember the cards
         yield return new WaitForSeconds(0.7f);
         
+        _isRevealed = false; 
         _animator.SetFloat("FlipSpeed", -1);
         _animator.Play("card_flip", 0, 1.0f);
         yield return new WaitForSeconds(0.33f);
@@ -93,18 +87,14 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
             yield return null;
         }
         
-        yield return new WaitForSeconds(0.4f);
-        
         var vfx = GetComponent<ParticleSystem>();
         vfx.Play();
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         
         // disable visual
         _canvasGroup.alpha = 0;
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
-        
-        // TODO Add Vfx dissolve for the cell
         
         this.enabled = false;
         
