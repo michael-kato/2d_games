@@ -27,8 +27,6 @@ public class GameManager : MonoBehaviour
     private static List<GameObject> _flippedTiles;
 
     private List<Transform> _cellTransforms = new List<Transform>();
-
-    
     
     private int _score;
     public int Score     {
@@ -47,7 +45,6 @@ public class GameManager : MonoBehaviour
     public delegate void SummonCthulhuAction();
     public static event SummonCthulhuAction OnSummonCthulhu;
     
-    // all the singleton ladies!
     private static GameManager _instance;
 
     private GameManager()
@@ -86,6 +83,7 @@ public class GameManager : MonoBehaviour
             {
                 cm1.Reset();
                 cm2.Reset();
+                Debug.Log("Bad guess! -Aura");
             }
 
             _flippedTiles.Clear();

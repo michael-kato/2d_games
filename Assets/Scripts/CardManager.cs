@@ -9,46 +9,28 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
 {
     public GameObject lootDrop;
     private bool _isRotating;
-    private Image _imageComponent;
+    private CanvasGroup _canvasGroup;
     public Sprite mysterySprite;
     public Sprite revealSprite;
     private bool _isRevealed;
     private Animator _animator;
-    private Image _cellImage;
 
+    private Image _image;
+    private Image _cellImage;
+    
     [SerializeField] public List<Sprite> frames;
-    public float framesPerSecond = 12f;
     private float _timer;
     private int _index;
 
     void Awake()
     {
-    
-    _imageComponent = GetComponent<Image>();
-    _animator = GetComponent<Animator>();
-    float randomOffset = Random.Range(0f, 1f);
-    _animator.Play("card_idle", 0, randomOffset);
+        _image = GetComponent<Image>();
+        _cellImage = transform.parent.GetComponent<Image>();
+        _canvasGroup = transform.parent.GetComponent<CanvasGroup>();
         
-    //_lootDrop.GetComponent<SpriteRenderer>().sprite = backSprite;
-    _cellImage = GetComponentInParent<Image>();
-
-    }
-
-    void Start()
-    {
-    }
-    
-    void Update()
-    {
-        if (_isRevealed) return;
-        
-        _timer += Time.deltaTime;
-        if (_timer >= 1f / framesPerSecond)
-        {
-            _timer -= 1f / framesPerSecond;
-            _index = (_index + 1) % frames.Count; // Loop back to start
-            _imageComponent.sprite = frames[_index];
-        }
+        _animator = GetComponent<Animator>();
+        float randomOffset = Random.Range(0f, 1f);
+        _animator.Play("card_idle", 0, randomOffset);
     }
     
     public void OnPointerClick(PointerEventData eventData)
@@ -65,18 +47,17 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
     {
         if (_isRevealed)
         {
-            _imageComponent.sprite = revealSprite;
+            _image.sprite = revealSprite;
         }
         else
         {
-            _isRevealed = false;
-
+            _image.sprite = mysterySprite;
+            Debug.Log($"{name} - revealing {mysterySprite.name}");
         }
     }
     
     public void Reset()
     {
-        //StopAllCoroutines(); 
         StartCoroutine(DoReset());
     }
 
@@ -92,7 +73,6 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         
         _animator.SetTrigger("Reset");
     }
-    
 
     public void Vaporize()
     {
@@ -101,6 +81,18 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
 
     IEnumerator DoVaporize()
     {
+        float elapsed = 0;
+        float duration = 1f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Lerp(1, 0, elapsed / duration);
+            
+            _cellImage.color = new Color(1, 1, 1, progress);
+            yield return null;
+        }
+        
         yield return new WaitForSeconds(0.4f);
         
         var vfx = GetComponent<ParticleSystem>();
@@ -108,12 +100,12 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         yield return new WaitForSeconds(0.3f);
         
         // disable visual
-        _imageComponent.sprite = null;
-        _imageComponent.material = null;
-        _imageComponent.color = new Color(0,0,0,0);
-        _cellImage.sprite = null;
-        _cellImage.material = null;
-        _cellImage.color = new Color(0,0,0,0);
+        _canvasGroup.alpha = 0;
+        _canvasGroup.blocksRaycasts = false;
+        _canvasGroup.interactable = false;
+        
+        // TODO Add Vfx dissolve for the cell
+        
         this.enabled = false;
         
         // drop loot!

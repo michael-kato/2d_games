@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6515743095151652941}
   - component: {fileID: 5248712028033354966}
+  - component: {fileID: 7447184137363565868}
   - component: {fileID: 5820601630228487826}
   m_Layer: 5
   m_Name: cell
@@ -45,6 +46,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4964882769797536066}
   m_CullTransparentMesh: 1
+--- !u!225 &7447184137363565868
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4964882769797536066}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &5820601630228487826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,7 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 8c9a8a6f50a18484d9fa9829eaef05d3, type: 2}
+  m_Material: {fileID: 2100000, guid: b77b6244d56e8b54ea60fa8f9e3929ce, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
