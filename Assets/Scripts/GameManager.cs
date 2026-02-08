@@ -311,8 +311,15 @@ public class GameManager : MonoBehaviour
     {
         if (_score >= 10 || (debug  && _score >= 1))
         {
-            OnSummonCthulhu?.Invoke();
+            SummonCthulhu();
         }
+    }
+
+    private void SummonCthulhu()
+    {
+        Debug.Log("Summoning Cthulhu!!!!!");
+        CameraShake.Instance.AddTrauma(50);
+        OnSummonCthulhu?.Invoke();
     }
     
 }

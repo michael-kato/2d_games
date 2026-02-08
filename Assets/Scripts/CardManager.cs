@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class CardManager : MonoBehaviour, IPointerClickHandler
@@ -14,7 +15,7 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
     public Sprite revealSprite;
     private bool _isRevealed;
     private Animator _animator;
-
+    private Light2D _light;
     private Image _image;
     private Image _cellImage;
     
@@ -25,8 +26,10 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
     void Awake()
     {
         _image = GetComponent<Image>();
+        // TODO: should probably move this script to the Cell instead...
         _cellImage = transform.parent.GetComponent<Image>();
         _canvasGroup = transform.parent.GetComponent<CanvasGroup>();
+        _light = transform.parent.GetComponent<Light2D>();
         
         _animator = GetComponent<Animator>();
         float randomOffset = Random.Range(0f, 1f);
@@ -45,7 +48,6 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
     
     public void SwapSprite()
     {
-        Debug.Log($"{name} - SwapSprite called. _isRevealed={_isRevealed}, sprite changing to: {(_isRevealed ? revealSprite.name : mysterySprite.name)}");
         _image.sprite = _isRevealed ? revealSprite : mysterySprite;
     }
     
@@ -75,6 +77,8 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
 
     IEnumerator DoVaporize()
     {
+        _light.enabled = true;
+        
         float elapsed = 0;
         float duration = 1f;
 
@@ -84,12 +88,17 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
             float progress = Mathf.Lerp(1, 0, elapsed / duration);
             
             _cellImage.color = new Color(1, 1, 1, progress);
+            _light.intensity = 1 - progress;
             yield return null;
         }
         
         var vfx = GetComponent<ParticleSystem>();
         vfx.Play();
+        CameraShake.Instance.AddTrauma(5);
+        
         yield return new WaitForSeconds(0.2f);
+        
+        _light.enabled = false;
         
         // disable visual
         _canvasGroup.alpha = 0;

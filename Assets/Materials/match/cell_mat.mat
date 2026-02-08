@@ -79,11 +79,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DissolveAmount: 0
+    - _DissolveAmount: 1
     - _EnableExternalAlpha: 0
+    - _GlowAmount: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
+    - _BurnColor: {r: 1, g: 0.4251497, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EdgeColor: {r: 1, g: 0.35488388, b: 0, a: 0}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
