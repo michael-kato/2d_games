@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject cardPrefab;
     [SerializeField] public GameObject lootPrefab;
     [SerializeField] public GameObject CthulhuPrefab;
+    [SerializeField] public Material godRay;
     
     [SerializeField] public int difficulty = 1;
 
@@ -62,6 +63,11 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
+
+    void Awake()
+    {
+        godRay.SetFloat("_Fade", 0);
+    }
     
     public static void CheckGuess(GameObject card)
     {
@@ -95,9 +101,7 @@ public class GameManager : MonoBehaviour
         _flippedTiles = new List<GameObject>();
 
         int numDuplicates = 1 + difficulty;
-        int numTilesGuessable = backTiles.Count * numDuplicates;
-        int gridSize = Mathf.CeilToInt(Mathf.Sqrt(numTilesGuessable));
-        int totalTiles = gridSize * gridSize;
+        int columns = 8;
 
         // fill list with some of each type of sprite available
         List<Sprite> allPossibleSprites = new List<Sprite>();
@@ -108,8 +112,9 @@ public class GameManager : MonoBehaviour
                 allPossibleSprites.Add(sprite);
             }
         }
-
-        // fill remaining places with generic cards
+        
+        int totalTiles = Mathf.CeilToInt((float)allPossibleSprites.Count / columns) * columns;
+        // fill remaining places with the filler card
         while (allPossibleSprites.Count < totalTiles)
         {
             allPossibleSprites.Add(fillerTile);
@@ -119,9 +124,10 @@ public class GameManager : MonoBehaviour
         allPossibleSprites.Shuffle();
 
         // initialize random tiles
-        for (int y = 0; y < gridSize; y++)
+        int rows = totalTiles / columns;
+        for (int y = 0; y < rows; y++)
         {
-            for (int x = 0; x < gridSize; x++)
+            for (int x = 0; x < columns; x++)
             {
                 Sprite revealSprite = allPossibleSprites[x + y];
                 
@@ -156,13 +162,38 @@ public class GameManager : MonoBehaviour
             StartCoroutine(AnimateCardAndLoot(cell));
             yield return new WaitForSeconds(0.05f);
         }
-
+        
+        // fade in god rays
+        int fadeID = Shader.PropertyToID("_Fade");
+        float dropDur = 0.8f;
+        float t = 0;
+        while (t < 1.0f)
+        {
+            t += Time.deltaTime / dropDur;
+            var fade = Mathf.Lerp(0, 1, t);
+            godRay.SetFloat(fadeID, fade);
+            yield return null;
+        }
+        godRay.SetFloat(fadeID, 1);
+        
         // drop loot
         foreach (Transform cell in _cellTransforms)
         {
             StartCoroutine(DropLootRoutine(cell));
             yield return new WaitForSeconds(0.05f);
         }
+        
+        // fade out god rays
+        dropDur = 0.3f;
+        t = 0;
+        while (t < 1.0f)
+        {
+            t += Time.deltaTime / dropDur;
+            var fade = Mathf.SmoothStep(1, 0, t);
+            godRay.SetFloat(fadeID, fade * fade);
+            yield return null;
+        }
+        godRay.SetFloat(fadeID, 0);
 
         // WAIT FOR ALL ANIMATIONS TO FINISH
         yield return new WaitForSeconds(_cellTransforms.Count * 0.07f);
@@ -204,14 +235,14 @@ public class GameManager : MonoBehaviour
         loot.GetComponent<SpriteRenderer>().sprite = card.revealSprite;
         card.lootDrop = loot;
 
-        // Drop 
-        float dropDur = 0.5f;
-        float t = 0;
+        // Drop loot
+        var dropDur = 0.5f;
+        var t = 0f;
         while (t < 1.0f)
         {
             t += Time.deltaTime / dropDur;
             // Ease in
-            float smoothT = t * t;
+            var smoothT = t * t;
             loot.transform.position = Vector3.Lerp(spawnPos, targetPos, smoothT);
             yield return null;
         }
@@ -320,6 +351,12 @@ public class GameManager : MonoBehaviour
         Debug.Log("Summoning Cthulhu!!!!!");
         CameraShake.Instance.AddTrauma(50);
         OnSummonCthulhu?.Invoke();
+    }
+
+    void OnDestroy()
+    {
+        // ultra hacky, TODO!!!
+        godRay.SetFloat("_Fade", 1);
     }
     
 }

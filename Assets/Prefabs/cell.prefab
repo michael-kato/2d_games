@@ -79,7 +79,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f47c1eb796c196443a7800f73a31596f, type: 3}
+  m_Sprite: {fileID: 234075171, guid: f0db32e41d813f6408b333a213293747, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0.5
-  m_PointLightOuterRadius: 1
+  m_PointLightOuterRadius: 0.8
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
