@@ -54,18 +54,20 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance
     {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new GameManager();
-            }
-            return _instance;
-        }
+        get { return _instance; }
     }
 
     void Awake()
     {
+        // singleton pattern
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+        
         godRay.SetFloat("_Fade", 0);
     }
     
