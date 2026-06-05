@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject lootPrefab;
     [SerializeField] public GameObject CthulhuPrefab;
     [SerializeField] public Material godRay;
+    private int _fadeID = Shader.PropertyToID("_Fade");
     
     [SerializeField] public int difficulty = 1;
 
@@ -46,11 +47,10 @@ public class GameManager : MonoBehaviour
     public delegate void SummonCthulhuAction();
     public static event SummonCthulhuAction OnSummonCthulhu;
     
+    public delegate void MatchedTileAction(Sprite matchedSprite);
+    public static event MatchedTileAction OnMatchedTile;
+    
     private static GameManager _instance;
-
-    private GameManager()
-    {
-    }
 
     public static GameManager Instance
     {
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
 
         _instance = this;
         
-        godRay.SetFloat("_Fade", 0);
+        godRay.SetFloat(_fadeID, 0);
     }
     
     public static void CheckGuess(GameObject card)
@@ -85,25 +85,31 @@ public class GameManager : MonoBehaviour
             {
                 cm1.Vaporize();
                 cm2.Vaporize();
-                Debug.Log("You got it! +1");
+                _instance.RegisterMatch(cm1.revealSprite);
+                
             }
             else
             {
                 cm1.Reset();
                 cm2.Reset();
-                Debug.Log("Bad guess! -Aura");
             }
 
             _flippedTiles.Clear();
         }
     }
 
-    IEnumerator Start()
-    {
-        _flippedTiles = new List<GameObject>();
+        private void RegisterMatch(Sprite matchedSprite)
+        {
+            Score++;
+            OnMatchedTile?.Invoke(matchedSprite);
+        }
 
-        int numDuplicates = 1 + difficulty;
-        int columns = 8;
+        IEnumerator Start()
+        {
+            _flippedTiles = new List<GameObject>();
+
+            int numDuplicates = 1 + difficulty;
+            int columns = 8;
 
         // fill list with some of each type of sprite available
         List<Sprite> allPossibleSprites = new List<Sprite>();
@@ -166,17 +172,17 @@ public class GameManager : MonoBehaviour
         }
         
         // fade in god rays
-        int fadeID = Shader.PropertyToID("_Fade");
         float dropDur = 0.8f;
         float t = 0;
+        float intesity = 0.7f;
         while (t < 1.0f)
         {
             t += Time.deltaTime / dropDur;
-            var fade = Mathf.Lerp(0, 1, t);
-            godRay.SetFloat(fadeID, fade);
+            var fade = Mathf.Lerp(0, intesity, t);
+            godRay.SetFloat(_fadeID, fade);
             yield return null;
         }
-        godRay.SetFloat(fadeID, 1);
+        godRay.SetFloat(_fadeID, intesity);
         
         // drop loot
         foreach (Transform cell in _cellTransforms)
@@ -192,10 +198,10 @@ public class GameManager : MonoBehaviour
         {
             t += Time.deltaTime / dropDur;
             var fade = Mathf.SmoothStep(1, 0, t);
-            godRay.SetFloat(fadeID, fade * fade);
+            godRay.SetFloat(_fadeID, fade * fade);
             yield return null;
         }
-        godRay.SetFloat(fadeID, 0);
+        godRay.SetFloat(_fadeID, 0);
 
         // WAIT FOR ALL ANIMATIONS TO FINISH
         yield return new WaitForSeconds(_cellTransforms.Count * 0.07f);
@@ -358,7 +364,7 @@ public class GameManager : MonoBehaviour
     void OnDestroy()
     {
         // ultra hacky, TODO!!!
-        godRay.SetFloat("_Fade", 1);
+        godRay.SetFloat(_fadeID, 1);
     }
     
 }
