@@ -1,0 +1,1449 @@
+=== PROFILER FRAME EXPORT ===
+Frame: 400
+Time: 6/6/2026 3:19:21 PM
+Min threshold: 0.01ms
+
+--- CPU PROFILER DATA ---
+Frame Threads: 29
+
+WARNING: Main thread appears to be waiting on work from other threads.
+Marked threads may contain potential main-thread blockers.
+
+--- THREAD 0: Main Thread ---
+  Thread Total: 33.47ms  Self: 0.25ms
+  NOTE: Main thread section.
+  NOTE: Main thread wait/synchronization candidate detected.
+
+Main Thread
+  Total: 33.47ms
+  Self:  0.25ms
+  Calls: 1
+  PlayerLoop
+    Total: 33.22ms
+    Self:  0.84ms
+    Calls: 1
+    TimeUpdate.WaitForLastPresentationAndUpdateTime
+      Total: 11.51ms
+      Self:  0.01ms
+      Calls: 1
+    PostLateUpdate.FinishFrameRendering
+      Total: 8.13ms
+      Self:  0.17ms
+      Calls: 1
+      UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke]
+        Total: 7.73ms
+        Self:  0.24ms
+        Calls: 1
+        Inl_UniversalRenderTotal
+          Total: 7.49ms
+          Self:  0.13ms
+          Calls: 1
+          Inl_RenderCameraStack
+            Total: 7.33ms
+            Self:  0.29ms
+            Calls: 1
+            Inl_UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera
+              Total: 4.47ms
+              Self:  0.62ms
+              Calls: 1
+              Inl_ExecuteRenderGraph
+                Total: 1.71ms
+                Self:  0.17ms
+                Calls: 1
+                Inl_Bloom
+                  Total: 0.22ms
+                  Self:  0.02ms
+                  Calls: 1
+                  Inl_RG_BloomDownsample
+                    Total: 0.09ms
+                    Self:  0.09ms
+                    Calls: 1
+                  Inl_RG_BloomUpsample
+                    Total: 0.07ms
+                    Self:  0.07ms
+                    Calls: 1
+                  Inl_RG_BloomPrefilter
+                    Total: 0.04ms
+                    Self:  0.04ms
+                    Calls: 1
+                Inl_Blit Color LUT
+                  Total: 0.16ms
+                  Self:  0.02ms
+                  Calls: 1
+                  Inl_ColorGradingLUT
+                    Total: 0.14ms
+                    Self:  0.14ms
+                    Calls: 1
+                Inl_Light2D SRT Pass
+                  Total: 0.16ms
+                  Self:  0.16ms
+                  Calls: 1
+                Inl_NRPRGComp_ExecuteDestroyResources
+                  Total: 0.14ms
+                  Self:  0.14ms
+                  Calls: 1
+                Inl_NRPRGComp_ExecuteBeginRenderpassCommand
+                  Total: 0.13ms
+                  Self:  0.13ms
+                  Calls: 1
+                Inl_Light2D SRT Pass
+                  Total: 0.10ms
+                  Self:  0.10ms
+                  Calls: 1
+                Inl_NRPRGComp_ExecuteInitializeResources
+                  Total: 0.08ms
+                  Self:  0.08ms
+                  Calls: 1
+                Inl_Setup Camera Properties
+                  Total: 0.07ms
+                  Self:  0.02ms
+                  Calls: 1
+                  Inl_ScriptableRenderer.SetPerCameraShaderVariables
+                    Total: 0.05ms
+                    Self:  0.05ms
+                    Calls: 1
+                Inl_NRPRGComp_ExecuteDestroyResources
+                  Total: 0.06ms
+                  Self:  0.06ms
+                  Calls: 1
+                Inl_RG_UberPost
+                  Total: 0.05ms
+                  Self:  0.05ms
+                  Calls: 1
+                Inl_NRPRGComp_ExecuteBeginRenderpassCommand
+                  Total: 0.04ms
+                  Self:  0.04ms
+                  Calls: 1
+                Inl_NRPRGComp_ExecuteInitializeResources
+                  Total: 0.04ms
+                  Self:  0.04ms
+                  Calls: 1
+                Inl_Initialize Frame
+                  Total: 0.03ms
+                  Self:  0.02ms
+                  Calls: 1
+                  Inl_ScriptableRenderer.ClearRenderingState
+                    Total: 0.01ms
+                    Self:  0.01ms
+                    Calls: 1
+                Inl_NRPRGComp_ExecuteBeginRenderpassCommand
+                  Total: 0.03ms
+                  Self:  0.03ms
+                  Calls: 1
+                Inl_Renderer2D Pass
+                  Total: 0.03ms
+                  Self:  0.03ms
+                  Calls: 1
+                Inl_NRPRGComp_ExecuteDestroyResources
+                  Total: 0.02ms
+                  Self:  0.02ms
+                  Calls: 1
+                Inl_NRPRGComp_ExecuteInitializeResources
+                  Total: 0.02ms
+                  Self:  0.02ms
+                  Calls: 1
+                Inl_NRPRGComp_ExecuteBeginRenderpassCommand
+                  Total: 0.02ms
+                  Self:  0.02ms
+                  Calls: 1
+                Inl_NRPRGComp_ExecuteInitializeResources
+                  Total: 0.01ms
+                  Self:  0.01ms
+                  Calls: 1
+                Inl_VFX Process Camera
+                  Total: 0.01ms
+                  Self:  0.01ms
+                  Calls: 1
+              Inl_RecordRenderGraph
+                Total: 0.87ms
+                Self:  0.04ms
+                Calls: 1
+                Inl_On Record Render Graph
+                  Total: 0.83ms
+                  Self:  0.76ms
+                  Calls: 1
+                  Inl_RG_UberPostSetupBloomPass
+                    Total: 0.04ms
+                    Self:  0.04ms
+                    Calls: 1
+                  Inl_RG_BloomSetup
+                    Total: 0.03ms
+                    Self:  0.03ms
+                    Calls: 1
+              CullScriptable
+                Total: 0.81ms
+                Self:  0.07ms
+                Calls: 1
+                CullResults.CreateSharedRendererScene
+                  Total: 0.29ms
+                  Self:  0.02ms
+                  Calls: 1
+                  EndRenderQueueExtraction
+                    Total: 0.21ms
+                    Self:  0.01ms
+                    Calls: 1
+                    WaitForJobGroupID
+                      Total: 0.15ms
+                      Self:  0.02ms
+                      Calls: 1
+                    QueuePrepareIntegrateMainThreadObjects
+                      Total: 0.05ms
+                      Self:  0.05ms
+                      Calls: 1
+                  BeginRenderQueueExtraction
+                    Total: 0.06ms
+                    Self:  0.06ms
+                    Calls: 1
+                SceneCulling
+                  Total: 0.28ms
+                  Self:  0.08ms
+                  Calls: 1
+                  CullSendEvents
+                    Total: 0.11ms
+                    Self:  0.01ms
+                    Calls: 1
+                    WaitForJobGroupID
+                      Total: 0.05ms
+                      Self:  0.03ms
+                      Calls: 1
+                    WaitForJobGroupID
+                      Total: 0.03ms
+                      Self:  0.02ms
+                      Calls: 1
+                    afterCullingOutputReady.Invoke
+                      Total: 0.02ms
+                      Self:  0.02ms
+                      Calls: 1
+                  WaitForJobGroupID
+                    Total: 0.07ms
+                    Self:  0.05ms
+                    Calls: 1
+                  PrepareSceneNodes
+                    Total: 0.03ms
+                    Self:  0.03ms
+                    Calls: 1
+                ParticleSystem.ScheduleGeometryJobs
+                  Total: 0.10ms
+                  Self:  0.08ms
+                  Calls: 1
+                  ScheduleGeometryJobs
+                    Total: 0.02ms
+                    Self:  0.02ms
+                    Calls: 1
+                PrepareSceneCullingParameters
+                  Total: 0.04ms
+                  Self:  0.03ms
+                  Calls: 1
+              Inl_ScriptableRenderer.SetupCullingParameters
+                Total: 0.25ms
+                Self:  0.18ms
+                Calls: 1
+                Cull 2D Lights and Shadow Casters
+                  Total: 0.08ms
+                  Self:  0.06ms
+                  Calls: 1
+              Inl_ComputeHashRenderGraph
+                Total: 0.06ms
+                Self:  0.06ms
+                Calls: 1
+              Inl_UniversalRenderPipeline.CreateRenderingData
+                Total: 0.06ms
+                Self:  0.04ms
+                Calls: 1
+                Inl_UniversalRenderPipeline.CreateLightData
+                  Total: 0.01ms
+                  Self:  0.01ms
+                  Calls: 1
+                Inl_UniversalRenderPipeline.CreateShadowData
+                  Total: 0.01ms
+                  Self:  0.01ms
+                  Calls: 1
+              Inl_UniversalRenderPipeline.SetupPerCameraShaderConstants
+                Total: 0.04ms
+                Self:  0.04ms
+                Calls: 1
+              Inl_CompileRenderGraph
+                Total: 0.04ms
+                Self:  0.04ms
+                Calls: 1
+            Inl_ScriptableRenderContext.Submit
+              Total: 2.08ms
+              Self:  0.15ms
+              Calls: 1
+              UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera
+                Total: 1.92ms
+                Self:  0.07ms
+                Calls: 1
+                ExecuteRenderGraph
+                  Total: 1.83ms
+                  Self:  0.13ms
+                  Calls: 1
+                  Renderer2D Pass
+                    Total: 0.86ms
+                    Self:  0.01ms
+                    Calls: 1
+                    RenderLoop.ScheduleDraw
+                      Total: 0.85ms
+                      Self:  0.01ms
+                      Calls: 1
+                      RenderLoop.ScheduleDraw
+                        Total: 0.84ms
+                        Self:  0.03ms
+                        Calls: 1
+                        RenderLoop.Draw
+                          Total: 0.29ms
+                          Self:  0.11ms
+                          Calls: 1
+                          StdRender.ApplyShader
+                            Total: 0.03ms
+                            Self:  0.03ms
+                            Calls: 1
+                          StdRender.ApplyShader
+                            Total: 0.03ms
+                            Self:  0.02ms
+                            Calls: 1
+                          StdRender.ApplyShader
+                            Total: 0.02ms
+                            Self:  0.02ms
+                            Calls: 1
+                          StdRender.ApplyShader
+                            Total: 0.01ms
+                            Self:  0.01ms
+                            Calls: 1
+                          StdRender.ApplyShader
+                            Total: 0.01ms
+                            Self:  0.01ms
+                            Calls: 1
+                          StdRender.ApplyShader
+                            Total: 0.01ms
+                            Self:  0.01ms
+                            Calls: 1
+                        RenderLoop.Draw
+                          Total: 0.25ms
+                          Self:  0.05ms
+                          Calls: 1
+                          BatchRenderer.Flush
+                            Total: 0.13ms
+                            Self:  0.13ms
+                            Calls: 1
+                          StdRender.ApplyShader
+                            Total: 0.02ms
+                            Self:  0.02ms
+                            Calls: 1
+                          StdRender.ApplyShader
+                            Total: 0.02ms
+                            Self:  0.02ms
+                            Calls: 1
+                        RenderLoop.Draw
+                          Total: 0.12ms
+                          Self:  0.07ms
+                          Calls: 1
+                          StdRender.ApplyShader
+                            Total: 0.02ms
+                            Self:  0.02ms
+                            Calls: 1
+                        RenderLoop.DrawSRPBatcher
+                          Total: 0.11ms
+                          Self:  0.02ms
+                          Calls: 1
+                          SRPBatcher.Flush
+                            Total: 0.03ms
+                            Self:  0.03ms
+                            Calls: 1
+                          SRPBRender.ApplyShader
+                            Total: 0.02ms
+                            Self:  0.02ms
+                            Calls: 1
+                          SRPBatcher.Flush
+                            Total: 0.02ms
+                            Self:  0.02ms
+                            Calls: 1
+                          SRPBRender.ApplyShader
+                            Total: 0.02ms
+                            Self:  0.02ms
+                            Calls: 1
+                        RenderLoop.DrawSRPBatcher
+                          Total: 0.04ms
+                          Self:  0.01ms
+                          Calls: 1
+                          SRPBRender.ApplyShader
+                            Total: 0.01ms
+                            Self:  0.01ms
+                            Calls: 1
+                          SRPBatcher.Flush
+                            Total: 0.01ms
+                            Self:  0.01ms
+                            Calls: 1
+                  DrawScreenSpaceUI
+                    Total: 0.11ms
+                    Self:  0.01ms
+                    Calls: 1
+                    UIEvents.IMGUIRenderOverlays
+                      Total: 0.10ms
+                      Self:  0.07ms
+                      Calls: 1
+                      GUI.Repaint
+                        Total: 0.03ms
+                        Self:  0.02ms
+                        Calls: 1
+                        UnityEngine.IMGUIModule.dll!UnityEngine::Event.Internal_MakeMasterEventCurrent() [Invoke]
+                          Total: 0.01ms
+                          Self:  0.01ms
+                          Calls: 1
+                  Setup Camera Properties
+                    Total: 0.07ms
+                    Self:  0.07ms
+                    Calls: 1
+                  RG_UberPost
+                    Total: 0.04ms
+                    Self:  0.03ms
+                    Calls: 1
+                  DrawScreenSpaceUI
+                    Total: 0.02ms
+                    Self:  0.01ms
+                    Calls: 1
+                CompileRenderGraph
+                  Total: 0.02ms
+                  Self:  0.02ms
+                  Calls: 1
+              RenderLoop.CleanupNodeQueue
+                Total: 0.02ms
+                Self:  0.02ms
+                Calls: 1
+            Inl_UniversalRenderPipeline.CreateCameraData
+              Total: 0.30ms
+              Self:  0.16ms
+              Calls: 1
+              Inl_UniversalRenderPipeline.InitializeStackedCameraData
+                Total: 0.14ms
+                Self:  0.14ms
+                Calls: 1
+            Inl_UpdateVolumeFramework
+              Total: 0.12ms
+              Self:  0.01ms
+              Calls: 1
+              VolumeManager.Update
+                Total: 0.10ms
+                Self:  0.07ms
+                Calls: 1
+                VolumeManager.ReplaceData
+                  Total: 0.03ms
+                  Self:  0.03ms
+                  Calls: 1
+            Inl_UniversalRenderPipeline.InitializeAdditionalCameraData
+              Total: 0.08ms
+              Self:  0.08ms
+              Calls: 1
+          Inl_UniversalRenderPipeline.SetupPerFrameShaderConstants
+            Total: 0.02ms
+            Self:  0.02ms
+            Calls: 1
+      WatermarkRender
+        Total: 0.08ms
+        Self:  0.04ms
+        Calls: 1
+        Material.SetPassFast
+          Total: 0.04ms
+          Self:  0.03ms
+          Calls: 1
+      UnityEngine.CoreModule.dll!UnityEngine.Rendering::SupportedRenderingFeatures.IsUIOverlayRenderedBySRP() [Invoke]
+        Total: 0.05ms
+        Self:  0.05ms
+        Calls: 1
+      DestroyCullResults
+        Total: 0.05ms
+        Self:  0.02ms
+        Calls: 1
+        RenderLoop.CleanupNodeQueue
+          Total: 0.03ms
+          Self:  0.03ms
+          Calls: 1
+    PostLateUpdate.PlayerUpdateCanvases
+      Total: 1.60ms
+      Self:  0.01ms
+      Calls: 1
+      UIEvents.UpdateCanvasRectTransform
+        Total: 0.05ms
+        Self:  0.05ms
+        Calls: 1
+      UIEvents.AlignCanvasRectTransformWithCamera
+        Total: 0.04ms
+        Self:  0.04ms
+        Calls: 1
+    FixedUpdate.Physics2DFixedUpdate
+      Total: 1.28ms
+      Self:  0.02ms
+      Calls: 1
+      Physics2D.Simulate
+        Total: 1.23ms
+        Self:  0.13ms
+        Calls: 1
+        Physics2D.Step
+          Total: 0.16ms
+          Self:  0.02ms
+          Calls: 1
+          Physics2D.FindNewContacts
+            Total: 0.05ms
+            Self:  0.05ms
+            Calls: 1
+        Physics2D.WriteTransforms
+          Total: 0.01ms
+          Self:  0.01ms
+          Calls: 1
+    PostLateUpdate.UpdateRectTransform
+      Total: 0.24ms
+      Self:  0.10ms
+      Calls: 1
+      TransformChangeSystem
+        Total: 0.11ms
+        Self:  0.06ms
+        Calls: 1
+        WaitForJobGroupID
+          Total: 0.05ms
+          Self:  0.02ms
+          Calls: 1
+      TransformChangeSystem
+        Total: 0.02ms
+        Self:  0.02ms
+        Calls: 1
+    PostLateUpdate.UpdateAllRenderers
+      Total: 0.19ms
+      Self:  0.02ms
+      Calls: 1
+      WaitForJobGroupID
+        Total: 0.10ms
+        Self:  0.06ms
+        Calls: 1
+    PreUpdate.PhysicsUpdate
+      Total: 0.11ms
+      Self:  0.11ms
+      Calls: 1
+    PreUpdate.NewInputUpdate
+      Total: 0.09ms
+      Self:  0.07ms
+      Calls: 1
+      UnityEngine.InputModule.dll!UnityEngineInternal.Input::NativeInputSystem.ShouldRunUpdate() [Invoke]
+        Total: 0.01ms
+        Self:  0.01ms
+        Calls: 1
+    PreUpdate.Physics2DUpdate
+      Total: 0.06ms
+      Self:  0.05ms
+      Calls: 1
+    PreLateUpdate.UIElementsUpdatePanels
+      Total: 0.04ms
+      Self:  0.01ms
+      Calls: 1
+      UnityEngine.UIElementsModule.dll!UnityEngine.UIElements::UIElementsRuntimeUtilityNative.UpdatePanels() [Invoke]
+        Total: 0.03ms
+        Self:  0.03ms
+        Calls: 1
+    PostLateUpdate.UpdateResolution
+      Total: 0.04ms
+      Self:  0.04ms
+      Calls: 1
+    InputProcess
+      Total: 0.03ms
+      Self:  0.03ms
+      Calls: 1
+    PostLateUpdate.EnlightenRuntimeUpdate
+      Total: 0.03ms
+      Self:  0.02ms
+      Calls: 1
+      UnityEngine.CoreModule.dll!UnityEngine.Rendering::SupportedRenderingFeatures.IsLightmapBakeTypeSupportedByRef() [Invoke]
+        Total: 0.01ms
+        Self:  0.01ms
+        Calls: 1
+    EarlyUpdate.UpdateCanvasRectTransform
+      Total: 0.03ms
+      Self:  0.03ms
+      Calls: 1
+    PreLateUpdate.Physics2DLateUpdate
+      Total: 0.03ms
+      Self:  0.01ms
+      Calls: 1
+      Physics2D.CollectProfileInfo
+        Total: 0.01ms
+        Self:  0.01ms
+        Calls: 1
+    FixedUpdate.NewInputFixedUpdate
+      Total: 0.03ms
+      Self:  0.02ms
+      Calls: 1
+    PreUpdate.AIUpdate
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    FixedUpdate.NewInputFixedUpdate
+      Total: 0.02ms
+      Self:  0.01ms
+      Calls: 1
+    EarlyUpdate.UpdateInputManager
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    PostLateUpdate.MemoryFrameMaintenance
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    EarlyUpdate.RendererNotifyInvisible
+      Total: 0.01ms
+      Self:  0.01ms
+      Calls: 1
+
+--- THREAD 1:  ---
+  Thread Total: 30.37ms  Self: 0.04ms
+  NOTE: Potential blocker samples detected on this thread.
+
+
+  Total: 30.37ms
+  Self:  0.04ms
+  Calls: 1
+  RenderLoop
+    Total: 18.54ms
+    Self:  2.61ms
+    Calls: 1
+    Gfx.PresentFrame
+      Total: 8.25ms
+      Self:  7.85ms
+      Calls: 1
+      Present.BlitToCurrentFB
+        Total: 0.21ms
+        Self:  0.21ms
+        Calls: 1
+      GpuRecorder.FrameTick
+        Total: 0.15ms
+        Self:  0.15ms
+        Calls: 1
+      Present.SecondarySurfaces
+        Total: 0.04ms
+        Self:  0.04ms
+        Calls: 1
+    UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera
+      Total: 7.45ms
+      Self:  0.03ms
+      Calls: 1
+      ExecuteRenderGraph
+        Total: 7.41ms
+        Self:  0.64ms
+        Calls: 1
+        Renderer2D Pass
+          Total: 2.26ms
+          Self:  0.03ms
+          Calls: 1
+          RenderLoop.Draw
+            Total: 0.91ms
+            Self:  0.30ms
+            Calls: 1
+            PutGeometryJobFence
+              Total: 0.12ms
+              Self:  0.02ms
+              Calls: 1
+              WaitForJobGroupID
+                Total: 0.10ms
+                Self:  0.03ms
+                Calls: 1
+                EngineJob
+                  Total: 0.07ms
+                  Self:  0.07ms
+                  Calls: 1
+            Canvas.RenderSubBatch
+              Total: 0.12ms
+              Self:  0.12ms
+              Calls: 1
+            Canvas.RenderSubBatch
+              Total: 0.08ms
+              Self:  0.08ms
+              Calls: 1
+            Canvas.RenderSubBatch
+              Total: 0.08ms
+              Self:  0.08ms
+              Calls: 1
+            ScheduleGeometryJobs
+              Total: 0.08ms
+              Self:  0.08ms
+              Calls: 1
+            Canvas.RenderSubBatch
+              Total: 0.07ms
+              Self:  0.07ms
+              Calls: 1
+            Canvas.RenderSubBatch
+              Total: 0.06ms
+              Self:  0.06ms
+              Calls: 1
+          RenderLoop.Draw
+            Total: 0.50ms
+            Self:  0.42ms
+            Calls: 1
+            PutGeometryJobFence
+              Total: 0.08ms
+              Self:  0.08ms
+              Calls: 1
+          RenderLoop.DrawSRPBatcher
+            Total: 0.45ms
+            Self:  0.08ms
+            Calls: 1
+            DrawBuffersBatchMode
+              Total: 0.19ms
+              Self:  0.19ms
+              Calls: 1
+            DrawBuffersBatchMode
+              Total: 0.17ms
+              Self:  0.17ms
+              Calls: 1
+          RenderLoop.Draw
+            Total: 0.26ms
+            Self:  0.17ms
+            Calls: 1
+            Gfx.DrawDynamic
+              Total: 0.08ms
+              Self:  0.08ms
+              Calls: 1
+          RenderLoop.DrawSRPBatcher
+            Total: 0.11ms
+            Self:  0.02ms
+            Calls: 1
+            DrawBuffersBatchMode
+              Total: 0.09ms
+              Self:  0.09ms
+              Calls: 1
+        Bloom
+          Total: 2.04ms
+          Self:  0.03ms
+          Calls: 1
+          RG_BloomDownsample
+            Total: 0.95ms
+            Self:  0.91ms
+            Calls: 1
+          RG_BloomUpsample
+            Total: 0.87ms
+            Self:  0.85ms
+            Calls: 1
+          RG_BloomPrefilter
+            Total: 0.20ms
+            Self:  0.18ms
+            Calls: 1
+            Gfx.SetRenderTarget
+              Total: 0.01ms
+              Self:  0.01ms
+              Calls: 1
+        Light2D SRT Pass
+          Total: 0.90ms
+          Self:  0.01ms
+          Calls: 1
+          Additive
+            Total: 0.89ms
+            Self:  0.89ms
+            Calls: 1
+        Blit Color LUT
+          Total: 0.90ms
+          Self:  0.01ms
+          Calls: 1
+          ColorGradingLUT
+            Total: 0.88ms
+            Self:  0.88ms
+            Calls: 1
+        Light2D SRT Pass
+          Total: 0.32ms
+          Self:  0.01ms
+          Calls: 1
+          Multiply
+            Total: 0.31ms
+            Self:  0.31ms
+            Calls: 1
+        RG_UberPost
+          Total: 0.14ms
+          Self:  0.14ms
+          Calls: 1
+        DrawScreenSpaceUI
+          Total: 0.02ms
+          Self:  0.02ms
+          Calls: 1
+        Setup Camera Properties
+          Total: 0.02ms
+          Self:  0.02ms
+          Calls: 1
+        DrawScreenSpaceUI
+          Total: 0.02ms
+          Self:  0.01ms
+          Calls: 1
+        Gfx.SetRenderTarget
+          Total: 0.01ms
+          Self:  0.01ms
+          Calls: 1
+      CompileRenderGraph
+        Total: 0.01ms
+        Self:  0.01ms
+        Calls: 1
+    Profiler.FlushRenderCounters
+      Total: 0.07ms
+      Self:  0.07ms
+      Calls: 1
+    PutAllGeometryJobFence
+      Total: 0.01ms
+      Self:  0.01ms
+      Calls: 1
+  RenderLoop
+    Total: 0.23ms
+    Self:  0.06ms
+    Calls: 1
+    Camera.Render
+      Total: 0.09ms
+      Self:  0.09ms
+      Calls: 1
+    PutGeometryJobFence
+      Total: 0.05ms
+      Self:  0.05ms
+      Calls: 1
+    ReflectionProbes.Update
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+  RenderLoop
+    Total: 0.11ms
+    Self:  0.03ms
+    Calls: 1
+    ScheduleGeometryJobs
+      Total: 0.08ms
+      Self:  0.08ms
+      Calls: 1
+  RenderLoop
+    Total: 0.07ms
+    Self:  0.03ms
+    Calls: 1
+    WaitForRenderJobs
+      Total: 0.04ms
+      Self:  0.04ms
+      Calls: 1
+  RenderLoop
+    Total: 0.07ms
+    Self:  0.05ms
+    Calls: 1
+  RenderLoop
+    Total: 0.06ms
+    Self:  0.03ms
+    Calls: 1
+    CustomRenderTextures.Update
+      Total: 0.03ms
+      Self:  0.03ms
+      Calls: 1
+
+--- THREAD 2:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 3:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 4:  ---
+  Thread Total: 33.47ms  Self: 0.00ms
+
+
+  Total: 33.47ms
+  Self:  0.00ms
+  Calls: 1
+  Semaphore.WaitForSignal
+    Total: 33.47ms
+    Self:  33.47ms
+    Calls: 1
+
+--- THREAD 5:  ---
+  Thread Total: 33.47ms  Self: 33.40ms
+
+
+  Total: 33.47ms
+  Self:  33.40ms
+  Calls: 1
+  Audio.Thread
+    Total: 0.06ms
+    Self:  0.05ms
+    Calls: 1
+
+--- THREAD 6:  ---
+  Thread Total: 33.47ms  Self: 33.43ms
+
+
+  Total: 33.47ms
+  Self:  33.43ms
+  Calls: 1
+  Audio.Thread
+    Total: 0.01ms
+    Self:  0.01ms
+    Calls: 1
+
+--- THREAD 7:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 8:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 9:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 10:  ---
+  Thread Total: 33.47ms  Self: 2.26ms
+
+
+  Total: 33.47ms
+  Self:  2.26ms
+  Calls: 1
+  Semaphore.WaitForSignal
+    Total: 13.07ms
+    Self:  13.07ms
+    Calls: 1
+  Semaphore.WaitForSignal
+    Total: 5.80ms
+    Self:  5.80ms
+    Calls: 1
+  Semaphore.WaitForSignal
+    Total: 4.11ms
+    Self:  4.11ms
+    Calls: 1
+  Semaphore.WaitForSignal
+    Total: 2.86ms
+    Self:  2.86ms
+    Calls: 1
+  Semaphore.WaitForSignal
+    Total: 2.57ms
+    Self:  2.57ms
+    Calls: 1
+  Semaphore.WaitForSignal
+    Total: 1.99ms
+    Self:  1.99ms
+    Calls: 1
+  Semaphore.WaitForSignal
+    Total: 0.67ms
+    Self:  0.67ms
+    Calls: 1
+  Semaphore.WaitForSignal
+    Total: 0.13ms
+    Self:  0.13ms
+    Calls: 1
+
+--- THREAD 11:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 12:  ---
+  Thread Total: 33.47ms  Self: 0.69ms
+  NOTE: Potential blocker samples detected on this thread.
+
+
+  Total: 33.47ms
+  Self:  0.69ms
+  Calls: 1
+  Idle
+    Total: 11.64ms
+    Self:  11.64ms
+    Calls: 1
+  Idle
+    Total: 4.02ms
+    Self:  4.02ms
+    Calls: 1
+  Idle
+    Total: 3.45ms
+    Self:  3.45ms
+    Calls: 1
+  Idle
+    Total: 2.49ms
+    Self:  2.49ms
+    Calls: 1
+  Idle
+    Total: 1.93ms
+    Self:  1.93ms
+    Calls: 1
+  Idle
+    Total: 1.57ms
+    Self:  1.57ms
+    Calls: 1
+  Idle
+    Total: 1.48ms
+    Self:  1.48ms
+    Calls: 1
+  Idle
+    Total: 1.08ms
+    Self:  1.08ms
+    Calls: 1
+  Idle
+    Total: 0.98ms
+    Self:  0.98ms
+    Calls: 1
+  Idle
+    Total: 0.78ms
+    Self:  0.78ms
+    Calls: 1
+  Idle
+    Total: 0.63ms
+    Self:  0.63ms
+    Calls: 1
+  Idle
+    Total: 0.57ms
+    Self:  0.57ms
+    Calls: 1
+  Idle
+    Total: 0.35ms
+    Self:  0.35ms
+    Calls: 1
+  Idle
+    Total: 0.31ms
+    Self:  0.31ms
+    Calls: 1
+  Idle
+    Total: 0.30ms
+    Self:  0.30ms
+    Calls: 1
+  Idle
+    Total: 0.19ms
+    Self:  0.19ms
+    Calls: 1
+  Idle
+    Total: 0.16ms
+    Self:  0.16ms
+    Calls: 1
+  EngineJob
+    Total: 0.14ms
+    Self:  0.02ms
+    Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+  Idle
+    Total: 0.09ms
+    Self:  0.09ms
+    Calls: 1
+  CopySpriteRendererBuffersJob (Burst)
+    Total: 0.07ms
+    Self:  0.07ms
+    Calls: 1
+  Idle
+    Total: 0.07ms
+    Self:  0.07ms
+    Calls: 1
+  Idle
+    Total: 0.06ms
+    Self:  0.06ms
+    Calls: 1
+  Idle
+    Total: 0.06ms
+    Self:  0.06ms
+    Calls: 1
+  LocalToWorldAndChangeDetectionTransformAccessJob (Burst)
+    Total: 0.02ms
+    Self:  0.02ms
+    Calls: 1
+
+--- THREAD 13:  ---
+  Thread Total: 33.47ms  Self: 0.04ms
+  NOTE: Potential blocker samples detected on this thread.
+
+
+  Total: 33.47ms
+  Self:  0.04ms
+  Calls: 1
+  Idle
+    Total: 21.22ms
+    Self:  21.22ms
+    Calls: 1
+  Idle
+    Total: 11.81ms
+    Self:  11.81ms
+    Calls: 1
+  EngineJob
+    Total: 0.40ms
+    Self:  0.40ms
+    Calls: 1
+
+--- THREAD 14:  ---
+  Thread Total: 33.47ms  Self: 0.57ms
+  NOTE: Potential blocker samples detected on this thread.
+
+
+  Total: 33.47ms
+  Self:  0.57ms
+  Calls: 1
+  Idle
+    Total: 15.74ms
+    Self:  15.74ms
+    Calls: 1
+  Idle
+    Total: 3.28ms
+    Self:  3.28ms
+    Calls: 1
+  Idle
+    Total: 2.38ms
+    Self:  2.38ms
+    Calls: 1
+  Idle
+    Total: 1.87ms
+    Self:  1.87ms
+    Calls: 1
+  Idle
+    Total: 1.19ms
+    Self:  1.19ms
+    Calls: 1
+  EngineJob
+    Total: 1.16ms
+    Self:  0.07ms
+    Calls: 1
+    Animator.ProcessGraph
+      Total: 0.70ms
+      Self:  0.69ms
+      Calls: 1
+    Animator.ProcessGraph
+      Total: 0.09ms
+      Self:  0.09ms
+      Calls: 1
+    Animator.ProcessGraph
+      Total: 0.06ms
+      Self:  0.05ms
+      Calls: 1
+      AnimationClipPlayable.EvaluateClip
+        Total: 0.01ms
+        Self:  0.01ms
+        Calls: 1
+    Animator.ProcessGraph
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessGraph
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessGraph
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessGraph
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessGraph
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessGraph
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessGraph
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessGraph
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.PrepareAnimationEvents
+      Total: 0.01ms
+      Self:  0.01ms
+      Calls: 1
+  Idle
+    Total: 0.86ms
+    Self:  0.86ms
+    Calls: 1
+  Idle
+    Total: 0.77ms
+    Self:  0.77ms
+    Calls: 1
+  Idle
+    Total: 0.60ms
+    Self:  0.60ms
+    Calls: 1
+  Idle
+    Total: 0.58ms
+    Self:  0.58ms
+    Calls: 1
+  Idle
+    Total: 0.33ms
+    Self:  0.33ms
+    Calls: 1
+  Idle
+    Total: 0.30ms
+    Self:  0.30ms
+    Calls: 1
+  Idle
+    Total: 0.25ms
+    Self:  0.25ms
+    Calls: 1
+  EngineJob
+    Total: 0.24ms
+    Self:  0.03ms
+    Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.04ms
+      Self:  0.04ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+    Animator.ProcessAnimations
+      Total: 0.02ms
+      Self:  0.02ms
+      Calls: 1
+  SkinDeformBatchedJob (Burst)
+    Total: 0.23ms
+    Self:  0.23ms
+    Calls: 1
+  Idle
+    Total: 0.23ms
+    Self:  0.23ms
+    Calls: 1
+  Idle
+    Total: 0.16ms
+    Self:  0.16ms
+    Calls: 1
+  EngineJob
+    Total: 0.15ms
+    Self:  0.08ms
+    Calls: 1
+    RenderLoop.Sort
+      Total: 0.01ms
+      Self:  0.01ms
+      Calls: 1
+  Idle
+    Total: 0.14ms
+    Self:  0.14ms
+    Calls: 1
+  Idle
+    Total: 0.13ms
+    Self:  0.13ms
+    Calls: 1
+  Idle
+    Total: 0.12ms
+    Self:  0.12ms
+    Calls: 1
+  Idle
+    Total: 0.10ms
+    Self:  0.10ms
+    Calls: 1
+  Idle
+    Total: 0.08ms
+    Self:  0.08ms
+    Calls: 1
+  Idle
+    Total: 0.07ms
+    Self:  0.07ms
+    Calls: 1
+  Idle
+    Total: 0.07ms
+    Self:  0.07ms
+    Calls: 1
+  Idle
+    Total: 0.06ms
+    Self:  0.06ms
+    Calls: 1
+  Idle
+    Total: 0.06ms
+    Self:  0.06ms
+    Calls: 1
+  LocalToWorldAndChangeDetectionTransformAccessJob (Burst)
+    Total: 0.06ms
+    Self:  0.06ms
+    Calls: 1
+  Idle
+    Total: 0.05ms
+    Self:  0.05ms
+    Calls: 1
+  Idle
+    Total: 0.05ms
+    Self:  0.05ms
+    Calls: 1
+  Idle
+    Total: 0.04ms
+    Self:  0.04ms
+    Calls: 1
+  Idle
+    Total: 0.04ms
+    Self:  0.04ms
+    Calls: 1
+  Idle
+    Total: 0.04ms
+    Self:  0.04ms
+    Calls: 1
+
+--- THREAD 15:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 16:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 17:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 18:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 19:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 20:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 21:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 22:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 23:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 24:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 25:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 26:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 27:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
+--- THREAD 28:  ---
+  Thread Total: 33.47ms  Self: 33.47ms
+
+
+  Total: 33.47ms
+  Self:  33.47ms
+  Calls: 1
+
