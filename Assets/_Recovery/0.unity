@@ -8228,7 +8228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872652164ab6fbc4180b566aff6ba078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 0
+  debug: 1
   gridContainer: {fileID: 1905645952}
   cellPrefab: {fileID: 4964882769797536066, guid: c9ef8e7b29add384f866d85cd85f4d82, type: 3}
   cardPrefab: {fileID: 1740675449380325304, guid: 1bb2397dea5aca042bb1b57960a157f0, type: 3}
@@ -8547,8 +8547,8 @@ RectTransform:
   - {fileID: 1569109852}
   - {fileID: 368126577}
   - {fileID: 1905645953}
-  - {fileID: 1961235414}
   - {fileID: 1458098641}
+  - {fileID: 1961235414}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -11933,7 +11933,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndingController
   cthulhuPrefab: {fileID: 7955390683158965801, guid: ab8fdd86f5f38684491e793d3dcaad1c, type: 3}
-  cthulhuParent: {fileID: 0}
+  cthulhuParent: {fileID: 560699149}
   riseDuration: 6
   startYOffset: 4
   endYOffset: 0
@@ -13419,7 +13419,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 420, y: -985}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 196.9, y: 73.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1961235415
 MonoBehaviour:

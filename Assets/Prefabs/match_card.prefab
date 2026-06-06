@@ -99,7 +99,6 @@ MonoBehaviour:
   - {fileID: 1923926079, guid: f0db32e41d813f6408b333a213293747, type: 3}
   - {fileID: 1894142650, guid: f0db32e41d813f6408b333a213293747, type: 3}
   - {fileID: 2119255759, guid: f0db32e41d813f6408b333a213293747, type: 3}
-  framesPerSecond: 12
 --- !u!61 &6558983193303969326
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4871,7 +4870,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &2608693569328237701
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4890,6 +4889,8 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4911,9 +4912,11 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
+  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 1
@@ -4945,7 +4948,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!95 &8652037712082145668
 Animator:
   serializedVersion: 7
