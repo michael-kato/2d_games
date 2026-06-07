@@ -64,7 +64,7 @@ public class TentacleEater : MonoBehaviour
 
     IEnumerator Swallow(Transform food)
     {
-        _tentacleController.canEat = false;
+        _tentacleController.DisableHunting();
         
         if (CameraShake.Instance != null)
         {
@@ -89,6 +89,6 @@ public class TentacleEater : MonoBehaviour
         currentFood = null;
         Destroy(food.gameObject); // TODO: pool
         
-        _tentacleController.canEat = true; 
+        _tentacleController.DisableHunting(); 
     }
 }

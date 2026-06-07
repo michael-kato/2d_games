@@ -14,14 +14,14 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
     public Sprite mysterySprite;
     public Sprite revealSprite;
     private bool _isRevealed;
-    private Animator _animator;
-    private Light2D _light;
     private Image _image;
     private Image _cellImage;
+    private Light2D _light;
     
     [SerializeField] public List<Sprite> frames;
-    private float _timer;
-    private int _index;
+    [SerializeField] public float frameRate = 12f;
+    [SerializeField] public float flipDuration = 0.33f;
+    private Coroutine _animationCoroutine;
 
     void Awake()
     {
@@ -31,9 +31,9 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         _canvasGroup = transform.parent.GetComponent<CanvasGroup>();
         _light = transform.parent.GetComponent<Light2D>();
         
-        _animator = GetComponent<Animator>();
-        float randomOffset = Random.Range(0f, 1f);
-        _animator.Play("card_idle", 0, randomOffset);
+        _image.sprite = mysterySprite;
+        transform.localEulerAngles = Vector3.zero;
+        transform.localScale = Vector3.one;
     }
     
     public void OnPointerClick(PointerEventData eventData)
@@ -41,7 +41,7 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         if (!_isRevealed)
         {
             _isRevealed = true;
-            _animator.SetTrigger("OnClick");
+            PlayFlipAnimation(false);
             GameManager.CheckGuess(this.GameObject());
         }
     }
@@ -56,18 +56,60 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         StartCoroutine(DoReset());
     }
 
+    private void PlayFlipAnimation(bool reverse)
+    {
+        if (_animationCoroutine != null) StopCoroutine(_animationCoroutine);
+        _animationCoroutine = StartCoroutine(AnimateFlip(reverse));
+    }
+
+    IEnumerator AnimateFlip(bool reverse)
+    {
+        float elapsed = 0;
+        bool swapped = false;
+
+        while (elapsed < flipDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / flipDuration;
+            if (reverse) t = 1 - t;
+
+            // Rotation
+            float yRotation = Mathf.Lerp(0, 180, t);
+            transform.localEulerAngles = new Vector3(0, yRotation, 0);
+
+            // Scale (pulse effect)
+            float scale = 1f;
+            if (t < 0.25f) scale = Mathf.Lerp(1, 1.1f, t / 0.25f);
+            else scale = Mathf.Lerp(1.1f, 1, (t - 0.25f) / 0.75f);
+            transform.localScale = new Vector3(scale, scale, 1);
+
+            // Swap sprite at midpoint
+            if (!swapped && t >= 0.65f) // 0.216 / 0.333 is approx 0.65
+            {
+                swapped = true;
+                SwapSprite();
+            }
+
+            yield return null;
+        }
+
+        // Final state
+        float finalT = reverse ? 0 : 1;
+        transform.localEulerAngles = new Vector3(0, Mathf.Lerp(0, 180, finalT), 0);
+        transform.localScale = Vector3.one;
+        if (!swapped) SwapSprite();
+    }
+
     IEnumerator DoReset()
     {
         // small wait to give the player a chance to remember the cards
         yield return new WaitForSeconds(0.7f);
         
         _isRevealed = false; 
-        _animator.SetFloat("FlipSpeed", -1);
-        _animator.Play("card_flip", 0, 1.0f);
-        yield return new WaitForSeconds(0.33f);
-        _animator.SetFloat("FlipSpeed", 1);
+        PlayFlipAnimation(true);
+        yield return new WaitForSeconds(flipDuration);
         
-        _animator.SetTrigger("Reset");
+        _image.sprite = mysterySprite;
     }
 
     public void Vaporize()

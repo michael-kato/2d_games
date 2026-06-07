@@ -26,8 +26,8 @@ public class TentacleController : MonoBehaviour
     void OnEnable() { GameManager.OnGameStarted += EnableHunting; }
     void OnDisable() { GameManager.OnGameStarted -= EnableHunting; }
 
-    void EnableHunting() { canEat = true; }
-    void DisableHunting() { canEat = false; }
+    public void EnableHunting() { canEat = true; }
+    public void DisableHunting() { canEat = false; }
     
     void Start()
     {
