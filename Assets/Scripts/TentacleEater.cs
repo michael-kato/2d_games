@@ -71,6 +71,8 @@ public class TentacleEater : MonoBehaviour
             CameraShake.Instance.AddTrauma(10f);
         }
         
+        AudioManager.Instance?.PlayOmnom();
+
         var system = food.GetComponent<ParticleSystem>();
         system.Play();
 

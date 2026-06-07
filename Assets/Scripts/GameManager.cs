@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
             {
                 cm1.Vaporize();
                 cm2.Vaporize();
+                AudioManager.Instance?.PlayGoodMatch();
                 _instance.RegisterMatch(cm1.revealSprite);
                 
             }
@@ -92,6 +93,7 @@ public class GameManager : MonoBehaviour
             {
                 cm1.Reset();
                 cm2.Reset();
+                AudioManager.Instance?.PlayBadMatch();
             }
 
             _flippedTiles.Clear();
@@ -142,14 +144,14 @@ public class GameManager : MonoBehaviour
                 // ideally would pool these
                 GameObject cell = Instantiate(cellPrefab, gridContainer.transform);
                 GameObject card = Instantiate(cardPrefab, cell.transform);
-
+                
                 _cellTransforms.Add(cell.transform);
                 
                 // CRITICAL: Set scale to zero immediately so they are ready to animate
                 cell.transform.localScale = Vector3.zero;
-
                 card.name = revealSprite.name;
                 CardManager cm = card.GetComponent<CardManager>();
+                
                 cm.mysterySprite = _mysteryTile;
                 cm.revealSprite = revealSprite;
 
@@ -175,6 +177,7 @@ public class GameManager : MonoBehaviour
         float dropDur = 0.8f;
         float t = 0;
         float intesity = 0.7f;
+        AudioManager.Instance?.PlayGodRays();
         while (t < 1.0f)
         {
             t += Time.deltaTime / dropDur;
@@ -255,7 +258,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        card.gameObject.GetComponent<Image>().sprite = card.revealSprite;
+        card.gameObject.GetComponent<Image>().sprite = card.mysterySprite;
         loot.SetActive(false);
         
         // hide the loot!
@@ -358,6 +361,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Summoning Cthulhu!!!!!");
         CameraShake.Instance.AddTrauma(50);
+        AudioManager.Instance?.PlayRawr();
         OnSummonCthulhu?.Invoke();
     }
 

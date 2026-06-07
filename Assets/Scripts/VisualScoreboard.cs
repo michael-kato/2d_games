@@ -62,6 +62,7 @@ public class VisualScoreboard : MonoBehaviour
         _matchedTileIcons.Add(icon);
         _matchCount = _matchedTileIcons.Count;
         
+        AudioManager.Instance?.PlayIncrement();
         RefreshCounter();
     }
 

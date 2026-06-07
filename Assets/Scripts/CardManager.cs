@@ -21,7 +21,10 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
     [SerializeField] public List<Sprite> frames;
     [SerializeField] public float frameRate = 12f;
     [SerializeField] public float flipDuration = 0.33f;
+    [SerializeField] public float idleAnimationSpeed = 1f;
+    [SerializeField] public float idleAnimationIntensity = 5f;
     private Coroutine _animationCoroutine;
+    private Coroutine _idleCoroutine;
 
     void Awake()
     {
@@ -30,10 +33,15 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         _cellImage = transform.parent.GetComponent<Image>();
         _canvasGroup = transform.parent.GetComponent<CanvasGroup>();
         _light = transform.parent.GetComponent<Light2D>();
-        
+    }
+
+    void Start()
+    {
         _image.sprite = mysterySprite;
         transform.localEulerAngles = Vector3.zero;
         transform.localScale = Vector3.one;
+        
+        _idleCoroutine = StartCoroutine(AnimateIdle());
     }
     
     public void OnPointerClick(PointerEventData eventData)
@@ -42,6 +50,7 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         {
             _isRevealed = true;
             PlayFlipAnimation(false);
+            AudioManager.Instance?.PlayFlip();
             GameManager.CheckGuess(this.GameObject());
         }
     }
@@ -62,8 +71,31 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         _animationCoroutine = StartCoroutine(AnimateFlip(reverse));
     }
 
+    IEnumerator AnimateIdle()
+    {
+        // Random offset so they don't all pulse at once
+        yield return new WaitForSeconds(Random.Range(0f, 1f));
+
+        float elapsed = 0;
+        while (true)
+        {
+            if (!_isRotating)
+            {
+                elapsed += Time.deltaTime * idleAnimationSpeed;
+                float tilt = Mathf.Sin(elapsed) * idleAnimationIntensity;
+                transform.localEulerAngles = new Vector3(0, _isRevealed ? 180 : 0, tilt);
+                
+                // Also a subtle scale pulse
+                float pulse = 1.0f + Mathf.Sin(elapsed * 2f) * 0.02f;
+                transform.localScale = new Vector3(pulse, pulse, 1);
+            }
+            yield return null;
+        }
+    }
+
     IEnumerator AnimateFlip(bool reverse)
     {
+        _isRotating = true;
         float elapsed = 0;
         bool swapped = false;
 
@@ -75,7 +107,8 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
 
             // Rotation
             float yRotation = Mathf.Lerp(0, 180, t);
-            transform.localEulerAngles = new Vector3(0, yRotation, 0);
+            float tilt = transform.localEulerAngles.z;
+            transform.localEulerAngles = new Vector3(0, yRotation, tilt);
 
             // Scale (pulse effect)
             float scale = 1f;
@@ -84,7 +117,7 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
             transform.localScale = new Vector3(scale, scale, 1);
 
             // Swap sprite at midpoint
-            if (!swapped && t >= 0.65f) // 0.216 / 0.333 is approx 0.65
+            if (!swapped && t >= 0.5f) // Swapping at exactly midpoint is usually better for 180 flip
             {
                 swapped = true;
                 SwapSprite();
@@ -98,6 +131,8 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         transform.localEulerAngles = new Vector3(0, Mathf.Lerp(0, 180, finalT), 0);
         transform.localScale = Vector3.one;
         if (!swapped) SwapSprite();
+        
+        _isRotating = false;
     }
 
     IEnumerator DoReset()
