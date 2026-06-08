@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     public static event MatchedTileAction OnMatchedTile;
     
     private static GameManager _instance;
+    public readonly List<Loot> activeLoot = new List<Loot>(4);
 
     public static GameManager Instance
     {

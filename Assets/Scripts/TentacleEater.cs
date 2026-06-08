@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class TentacleEater : MonoBehaviour
 {
+    public float detectionRadius = 0.5f;
     public float swallowDistance = 0.01f; // Distance to "mouth" before it disappears
     public float grabStrength = 1.0f;
     public string foodTag = "Loot";
@@ -36,11 +37,27 @@ public class TentacleEater : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void FixedUpdate()
     {
-        if (currentFood == null && collision.CompareTag(foodTag) && _tentacleController.canEat)
+        GameManager gm = GameManager.Instance;
+        if (gm == null || gm.activeLoot.Count == 0) return;
+
+        if (currentFood == null && _tentacleController.canEat)
         {
-            GrabFood(collision.transform);
+            float sqrRadius = detectionRadius * detectionRadius;
+            Vector2 myPos = transform.position;
+
+            for (int i = 0; i < gm.activeLoot.Count; i++)
+            {
+                Loot loot = gm.activeLoot[i];
+                if (loot == null) continue;
+
+                if (Vector2.SqrMagnitude(myPos - (Vector2)loot.transform.position) <= sqrRadius)
+                {
+                    GrabFood(loot.transform);
+                    return;
+                }
+            }
         }
     }
 
@@ -64,33 +81,49 @@ public class TentacleEater : MonoBehaviour
 
     IEnumerator Swallow(Transform food)
     {
+        if (food == null) yield break;
+
         _tentacleController.DisableHunting();
         
-        if (CameraShake.Instance != null)
+        try
         {
-            CameraShake.Instance.AddTrauma(10f);
-        }
-        
-        AudioManager.Instance?.PlayOmnom();
-
-        var system = food.GetComponent<ParticleSystem>();
-        system.Play();
-
-        var scale = food.localScale;
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 5; j++)
+            if (CameraShake.Instance != null)
             {
-                scale *= 0.9f;
-                food.localScale = scale;
-                yield return new WaitForSeconds(0.02f);
+                CameraShake.Instance.AddTrauma(10f);
             }
-            yield return new WaitForSeconds(0.5f);
-        }
+            
+            AudioManager.Instance?.PlayOmnom();
 
-        currentFood = null;
-        Destroy(food.gameObject); // TODO: pool
-        
-        _tentacleController.EnableHunting(); 
+            // Use a local variable to safely check for the particle system
+            var system = food.GetComponent<ParticleSystem>();
+            if (system != null) system.Play();
+
+            var scale = food.localScale;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    if (food == null) yield break;
+                    scale *= 0.9f;
+                    food.localScale = scale;
+                    yield return new WaitForSeconds(0.02f);
+                }
+                if (food == null) yield break;
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+        finally
+        {
+            currentFood = null;
+            if (food != null) Destroy(food.gameObject); // TODO: pool
+            
+            _tentacleController.EnableHunting();
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 }

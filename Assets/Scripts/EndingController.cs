@@ -8,11 +8,11 @@ public class EndingController : MonoBehaviour
     [Header("Cthulhu")]
     [SerializeField] private GameObject cthulhuPrefab;
     [SerializeField] private Transform cthulhuParent;
-    [SerializeField] private float riseDuration = 8f;
+    [SerializeField] private float riseDuration = 6f;
     [SerializeField] private float startYOffset = 4f;
     [SerializeField] private float endYOffset = 0f;
     [SerializeField] private Vector3 startScale = Vector3.one;
-    [SerializeField] private Vector3 endScale = new Vector3(20f, 20f, 20f);
+    [SerializeField] private Vector3 endScale = new Vector3(16f, 16f, 16f);
 
     [Header("Ending Fade")]
     [SerializeField] private Image blackFadeImage;

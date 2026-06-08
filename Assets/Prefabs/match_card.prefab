@@ -95,10 +95,6 @@ MonoBehaviour:
   lootDrop: {fileID: 0}
   mysterySprite: {fileID: 0}
   revealSprite: {fileID: 0}
-  frames:
-  - {fileID: 1923926079, guid: f0db32e41d813f6408b333a213293747, type: 3}
-  - {fileID: 1894142650, guid: f0db32e41d813f6408b333a213293747, type: 3}
-  - {fileID: 2119255759, guid: f0db32e41d813f6408b333a213293747, type: 3}
   flipClip: {fileID: 7400000, guid: 0cd9ef543b6a3c047b2bc8197395c0ab, type: 2}
   flipHardClip: {fileID: 7400000, guid: 6983cbe599f73435999b26dcd5060534, type: 2}
   frameRate: 12
@@ -4966,7 +4962,7 @@ Animation:
   m_Animation: {fileID: 7400000, guid: 6983cbe599f73435999b26dcd5060534, type: 2}
   m_Animations: []
   m_WrapMode: 0
-  m_PlayAutomatically: 1
+  m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_UpdateMode: 0
   m_CullingType: 0
