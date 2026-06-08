@@ -602,7 +602,7 @@ MonoBehaviour:
     m_Value: 0
   scatter:
     m_OverrideState: 1
-    m_Value: 0.7
+    m_Value: 0.4
   clamp:
     m_OverrideState: 1
     m_Value: 65472
@@ -614,7 +614,7 @@ MonoBehaviour:
     m_Value: 0
   filter:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   downscale:
     m_OverrideState: 1
     m_Value: 0
