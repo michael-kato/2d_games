@@ -71,6 +71,12 @@ public class GameManager : MonoBehaviour
         godRay.SetFloat(_fadeID, 0);
     }
     
+    public static bool IsNextGuessMatch(GameObject card)
+    {
+        if (_flippedTiles.Count == 0) return false;
+        return _flippedTiles[0].name == card.name;
+    }
+
     public static void CheckGuess(GameObject card)
     {
         _flippedTiles.Add(card);
@@ -166,10 +172,10 @@ public class GameManager : MonoBehaviour
         // Wait for Grid Layout to calculate
         yield return new WaitForEndOfFrame();
         
-        // ANIMATE CARDS
+        // spawn cards
         foreach (Transform cell in _cellTransforms)
         {
-            StartCoroutine(AnimateCardAndLoot(cell));
+            StartCoroutine(SpawnCards(cell));
             yield return new WaitForSeconds(0.05f);
         }
         
@@ -215,7 +221,7 @@ public class GameManager : MonoBehaviour
         OnGameStarted?.Invoke();
     }
     
-    IEnumerator AnimateCardAndLoot(Transform cell)
+    IEnumerator SpawnCards(Transform cell)
     {
         // 1. POP IN THE CARD
         float duration = 0.4f;
@@ -258,7 +264,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        card.gameObject.GetComponent<Image>().sprite = card.mysterySprite;
+        card.gameObject.GetComponent<Image>().sprite = card.revealSprite;
         loot.SetActive(false);
         
         // hide the loot!

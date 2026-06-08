@@ -18,7 +18,8 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
     private Image _cellImage;
     private Light2D _light;
     
-    [SerializeField] public List<Sprite> frames;
+    [SerializeField] public AnimationClip flipClip;
+    [SerializeField] public AnimationClip flipHardClip;
     [SerializeField] public float frameRate = 12f;
     [SerializeField] public float flipDuration = 0.33f;
     [SerializeField] public float idleAnimationSpeed = 1f;
@@ -49,9 +50,10 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         if (!_isRevealed)
         {
             _isRevealed = true;
-            PlayFlipAnimation(false);
+            bool isMatch = GameManager.IsNextGuessMatch(this.gameObject);
+            PlayFlipAnimation(false, isMatch);
             AudioManager.Instance?.PlayFlip();
-            GameManager.CheckGuess(this.GameObject());
+            GameManager.CheckGuess(this.gameObject);
         }
     }
     
@@ -65,10 +67,10 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         StartCoroutine(DoReset());
     }
 
-    private void PlayFlipAnimation(bool reverse)
+    private void PlayFlipAnimation(bool reverse, bool hard = false)
     {
         if (_animationCoroutine != null) StopCoroutine(_animationCoroutine);
-        _animationCoroutine = StartCoroutine(AnimateFlip(reverse));
+        _animationCoroutine = StartCoroutine(AnimateFlip(reverse, hard));
     }
 
     IEnumerator AnimateIdle()
@@ -93,31 +95,91 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    IEnumerator AnimateFlip(bool reverse)
+    IEnumerator AnimateOomph()
+    {
+        float elapsed = 0;
+        float duration = 0.5f;
+        Vector3 initialScale = transform.localScale;
+        
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            
+            // A quick punch out and back in
+            float punch = 1.0f + Mathf.Sin(t * Mathf.PI) * 0.2f;
+            transform.localScale = initialScale * punch;
+            
+            yield return null;
+        }
+        transform.localScale = initialScale;
+    }
+
+    IEnumerator AnimateFlip(bool reverse, bool hard = false)
     {
         _isRotating = true;
         float elapsed = 0;
         bool swapped = false;
 
-        while (elapsed < flipDuration)
+        AnimationClip clip = hard ? flipHardClip : flipClip;
+        if (clip == null) clip = flipClip; // fallback
+        
+        float duration = clip != null ? clip.length : flipDuration;
+
+        // Get the event time from the clip if it exists
+        float eventTime = 0.5f; // fallback
+        if (clip != null && clip.events.Length > 0)
+        {
+            foreach (var ev in clip.events)
+            {
+                if (ev.functionName == "SwapSprite")
+                {
+                    eventTime = ev.time / clip.length;
+                    break;
+                }
+            }
+        }
+
+        while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float t = elapsed / flipDuration;
-            if (reverse) t = 1 - t;
-
+            float t = elapsed / duration;
+            
             // Rotation
-            float yRotation = Mathf.Lerp(0, 180, t);
+            float lerpT = reverse ? 1 - t : t;
+            
+            float yRotation;
+            if (hard && !reverse)
+            {
+                // Replicate the 0 -> 180 -> 170 -> 180 overshoot from the anim
+                if (lerpT < 0.77f) // 0.333 / 0.433
+                {
+                    yRotation = Mathf.Lerp(0, 180, lerpT / 0.77f);
+                }
+                else
+                {
+                    float overshootT = (lerpT - 0.77f) / 0.23f;
+                    if (overshootT < 0.5f) yRotation = Mathf.Lerp(180, 170, overshootT * 2);
+                    else yRotation = Mathf.Lerp(170, 180, (overshootT - 0.5f) * 2);
+                }
+            }
+            else
+            {
+                yRotation = Mathf.Lerp(0, 180, lerpT);
+            }
+
             float tilt = transform.localEulerAngles.z;
             transform.localEulerAngles = new Vector3(0, yRotation, tilt);
 
             // Scale (pulse effect)
             float scale = 1f;
-            if (t < 0.25f) scale = Mathf.Lerp(1, 1.1f, t / 0.25f);
-            else scale = Mathf.Lerp(1.1f, 1, (t - 0.25f) / 0.75f);
+            if (lerpT < 0.25f) scale = Mathf.Lerp(1, 1.1f, lerpT / 0.25f);
+            else scale = Mathf.Lerp(1.1f, 1, (lerpT - 0.25f) / 0.75f);
             transform.localScale = new Vector3(scale, scale, 1);
 
-            // Swap sprite at midpoint
-            if (!swapped && t >= 0.5f) // Swapping at exactly midpoint is usually better for 180 flip
+            // Swap sprite based on animation event time
+            // When reversing, we want to swap at the same visual point
+            if (!swapped && (reverse ? t >= (1 - eventTime) : t >= eventTime))
             {
                 swapped = true;
                 SwapSprite();
@@ -127,8 +189,8 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         }
 
         // Final state
-        float finalT = reverse ? 0 : 1;
-        transform.localEulerAngles = new Vector3(0, Mathf.Lerp(0, 180, finalT), 0);
+        float finalY = reverse ? 0 : 180;
+        transform.localEulerAngles = new Vector3(0, finalY, 0);
         transform.localScale = Vector3.one;
         if (!swapped) SwapSprite();
         
@@ -143,8 +205,6 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
         _isRevealed = false; 
         PlayFlipAnimation(true);
         yield return new WaitForSeconds(flipDuration);
-        
-        _image.sprite = mysterySprite;
     }
 
     public void Vaporize()
@@ -154,7 +214,8 @@ public class CardManager : MonoBehaviour, IPointerClickHandler
 
     IEnumerator DoVaporize()
     {
-        _light.enabled = true;
+        yield return StartCoroutine(AnimateOomph());
+         _light.enabled = true;
         
         float elapsed = 0;
         float duration = 1f;

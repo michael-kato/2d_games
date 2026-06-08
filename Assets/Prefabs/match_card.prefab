@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6558983193303969326}
   - component: {fileID: 1206031372499058819}
   - component: {fileID: 2608693569328237701}
+  - component: {fileID: 4899551216513405588}
   m_Layer: 0
   m_Name: match_card
   m_TagString: Untagged
@@ -98,6 +99,12 @@ MonoBehaviour:
   - {fileID: 1923926079, guid: f0db32e41d813f6408b333a213293747, type: 3}
   - {fileID: 1894142650, guid: f0db32e41d813f6408b333a213293747, type: 3}
   - {fileID: 2119255759, guid: f0db32e41d813f6408b333a213293747, type: 3}
+  flipClip: {fileID: 7400000, guid: 0cd9ef543b6a3c047b2bc8197395c0ab, type: 2}
+  flipHardClip: {fileID: 7400000, guid: 6983cbe599f73435999b26dcd5060534, type: 2}
+  frameRate: 12
+  flipDuration: 0.33
+  idleAnimationSpeed: 1
+  idleAnimationIntensity: 5
 --- !u!61 &6558983193303969326
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4947,3 +4954,19 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!111 &4899551216513405588
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740675449380325304}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 7400000, guid: 6983cbe599f73435999b26dcd5060534, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0

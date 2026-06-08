@@ -91,6 +91,6 @@ public class TentacleEater : MonoBehaviour
         currentFood = null;
         Destroy(food.gameObject); // TODO: pool
         
-        _tentacleController.DisableHunting(); 
+        _tentacleController.EnableHunting(); 
     }
 }

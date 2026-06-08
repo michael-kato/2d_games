@@ -40,6 +40,7 @@ public class AudioManager : MonoBehaviour
     {
         if (clip != null)
         {
+            
             _audioSource.PlayOneShot(clip);
         }
     }

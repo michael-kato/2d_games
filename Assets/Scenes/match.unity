@@ -848,7 +848,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 18
+    type: 0
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -935,7 +935,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 2.72
+      value: 0.23
       mode: 0
       spread: 0
       speed:
@@ -6532,7 +6532,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &375577805
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8219,6 +8219,7 @@ GameObject:
   - component: {fileID: 976350519}
   - component: {fileID: 976350518}
   - component: {fileID: 976350520}
+  - component: {fileID: 976350521}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -8238,7 +8239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872652164ab6fbc4180b566aff6ba078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   gridContainer: {fileID: 1905645952}
   cellPrefab: {fileID: 4964882769797536066, guid: c9ef8e7b29add384f866d85cd85f4d82, type: 3}
   cardPrefab: {fileID: 1740675449380325304, guid: 1bb2397dea5aca042bb1b57960a157f0, type: 3}
@@ -8283,6 +8284,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cfaba0195b404c8ab602455c6328ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &976350521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976350517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69b6de40f3d64e038ad2b674276c897c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  flipClip: {fileID: 8300000, guid: b6c94a13fec8fead7b624efa788b2e98, type: 3}
+  goodMatchClip: {fileID: 8300000, guid: d24d085398deafdf68f78e17cda8d84b, type: 3}
+  badMatchClip: {fileID: 8300000, guid: f6c8187f606809f6a8f968147a39dbac, type: 3}
+  godRaysClip: {fileID: 8300000, guid: 41a20bc99954e9a33ab07c4bcbbbd782, type: 3}
+  incrementClip: {fileID: 8300000, guid: cd10f978302232daea8610f98bac2074, type: 3}
+  omnomClip: {fileID: 8300000, guid: 562bce8314cbb6c8ab3f9b81f9dafb94, type: 3}
+  rawrClip: {fileID: 8300000, guid: 7514d94113e75c5c09562321c11e556a, type: 3}
 --- !u!1 &989538450
 GameObject:
   m_ObjectHideFlags: 0
@@ -8451,7 +8471,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -9969,7 +9989,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -10263,7 +10283,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1521953575
 Transform:
   m_ObjectHideFlags: 0
@@ -13645,7 +13665,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1969096394
 RectTransform:
   m_ObjectHideFlags: 0
